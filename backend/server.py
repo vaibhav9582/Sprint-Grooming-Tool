@@ -298,6 +298,8 @@ async def disconnect(sid):
 dist_path = os.path.join(os.path.dirname(__file__), 'dist', 'browser')
 if not os.path.exists(dist_path):
     dist_path = os.path.join(os.path.dirname(__file__), 'dist')
+if not os.path.exists(dist_path) or not os.path.exists(os.path.join(dist_path, 'index.html')):
+    dist_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'dist', 'frontend', 'browser')
 
 if os.path.exists(dist_path) and (os.path.exists(os.path.join(dist_path, 'index.html')) or os.path.isdir(dist_path)):
     print(f"Production static folder found at {dist_path}. Mounting static assets.")
