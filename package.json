@@ -1,0 +1,15 @@
+{
+  "name": "exlproject-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix frontend && python -m venv venv && .\\venv\\Scripts\\pip install -r backend/requirements.txt",
+    "dev:backend": ".\\venv\\Scripts\\python backend/server.py",
+    "dev:frontend": "npm run start --prefix frontend",
+    "dev": "npm run start --prefix frontend",
+    "server": ".\\venv\\Scripts\\python backend/server.py",
+    "build": "npm run build --prefix frontend",
+    "build:prod": "npm install --prefix frontend && npm run build --prefix frontend",
+    "start": ".\\venv\\Scripts\\python backend/server.py"
+  }
+}
