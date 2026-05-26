@@ -95,10 +95,10 @@ export class App implements OnInit, OnDestroy {
   private confettiActive = false;
 
   get socketUrl(): string {
-    if (window.location.port && window.location.port !== '3000') {
-      return `${window.location.protocol}//${window.location.hostname}:3000`;
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      return 'http://127.0.0.1:3000';
     }
-    return window.location.origin;
+    return 'https://sprintgroomingtool-1.onrender.com';
   }
 
   // Pre-defined deck mapping helper
