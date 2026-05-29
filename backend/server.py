@@ -1,5 +1,8 @@
 import os
 import asyncio
+import urllib.request
+import json
+import base64
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -18,6 +21,99 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.post("/api/jira/sprint")
+async def get_jira_sprint_issues(data: dict):
+    host = data.get("host", "").strip()
+    email = data.get("email", "").strip()
+    token = data.get("token", "").strip()
+    sprint_id = data.get("sprintId", "").strip()
+    is_demo = data.get("isDemo", True)
+
+    if is_demo:
+        # Return mock issues for demo mode
+        mock_issues = [
+            {
+                "id": "JIRA-101",
+                "title": "Auth Service Integration",
+                "desc": "Implement OAuth2 authentication flow and connect to the user database."
+            },
+            {
+                "id": "JIRA-102",
+                "title": "Database Optimization",
+                "desc": "Optimize PostgreSQL indexes for high-frequency queries on the transaction log table."
+            },
+            {
+                "id": "JIRA-103",
+                "title": "Docker Setup",
+                "desc": "Containerize the FastAPI backend and Angular frontend for production deployment."
+            }
+        ]
+        return {"success": True, "issues": mock_issues}
+
+    # Real Jira API Call
+    try:
+        if not host.startswith("http://") and not host.startswith("https://"):
+            host = "https://" + host
+        
+        host = host.rstrip("/")
+        url = f"{host}/rest/agile/1.0/sprint/{sprint_id}/issue"
+        
+        auth_str = f"{email}:{token}"
+        auth_bytes = auth_str.encode("utf-8")
+        auth_b64 = base64.b64encode(auth_bytes).decode("utf-8")
+        
+        req = urllib.request.Request(
+            url,
+            headers={
+                "Authorization": f"Basic {auth_b64}",
+                "Accept": "application/json"
+            },
+            method="GET"
+        )
+        
+        loop = asyncio.get_event_loop()
+        def fetch_url():
+            with urllib.request.urlopen(req, timeout=10) as response:
+                return response.read()
+                
+        resp_data = await loop.run_in_executor(None, fetch_url)
+        json_resp = json.loads(resp_data.decode("utf-8"))
+        
+        issues = []
+        for item in json_resp.get("issues", []):
+            issue_id = item.get("key", "")
+            fields = item.get("fields", {})
+            title = fields.get("summary", "")
+            
+            desc = ""
+            raw_desc = fields.get("description", "")
+            if isinstance(raw_desc, dict):
+                try:
+                    text_parts = []
+                    def extract_text(node):
+                        if node.get("type") == "text":
+                            text_parts.append(node.get("text", ""))
+                        for child in node.get("content", []):
+                            extract_text(child)
+                    extract_text(raw_desc)
+                    desc = "".join(text_parts)
+                except Exception:
+                    desc = str(raw_desc)
+            else:
+                desc = str(raw_desc) if raw_desc else ""
+                
+            issues.append({
+                "id": issue_id,
+                "title": title,
+                "desc": desc
+            })
+            
+        return {"success": True, "issues": issues}
+        
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
 
 # Initialize Socket.io AsyncServer
 sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')

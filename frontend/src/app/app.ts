@@ -54,6 +54,19 @@ export class App implements OnInit, OnDestroy {
   newTicketTitle = '';
   newTicketDesc = '';
 
+  // Jira Integration States
+  jiraTab: 'manual' | 'jira' = 'manual';
+  jiraHost = 'https://your-company.atlassian.net';
+  jiraEmail = '';
+  jiraToken = '';
+  jiraSprintId = '';
+  isJiraDemo = true;
+  isJiraConnected = false;
+  jiraIssues: any[] = [];
+  selectedJiraIssueIds: string[] = [];
+  isJiraLoading = false;
+  jiraError = '';
+
   // Settings states
   isSettingsOpen = false;
   isMembersListOpen = false;
@@ -1021,5 +1034,134 @@ export class App implements OnInit, OnDestroy {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
     }
+  }
+
+  // Jira Integration Handlers
+  async handleJiraConnectAndFetch() {
+    this.isJiraLoading = true;
+    this.jiraError = '';
+    this.jiraIssues = [];
+    this.selectedJiraIssueIds = [];
+
+    if (!this.isJiraDemo) {
+      if (!this.jiraHost.trim() || !this.jiraEmail.trim() || !this.jiraToken.trim() || !this.jiraSprintId.trim()) {
+        this.jiraError = 'All fields are required when Demo Mode is disabled.';
+        this.isJiraLoading = false;
+        return;
+      }
+    }
+
+    try {
+      const response = await fetch(`${this.socketUrl}/api/jira/sprint`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          host: this.isJiraDemo ? 'https://demo.atlassian.net' : this.jiraHost.trim(),
+          email: this.isJiraDemo ? 'demo@company.com' : this.jiraEmail.trim(),
+          token: this.isJiraDemo ? 'demo_token_123' : this.jiraToken.trim(),
+          sprintId: this.isJiraDemo ? 'demo-sprint-id' : this.jiraSprintId.trim(),
+          isDemo: this.isJiraDemo
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        this.ngZone.run(() => {
+          this.jiraIssues = data.issues || [];
+          this.selectedJiraIssueIds = (data.issues || []).map((issue: any) => issue.id);
+          this.isJiraConnected = true;
+          this.addToast(this.isJiraDemo ? 'Connected to Demo Jira Sprint successfully!' : 'Connected and synced with Jira Sprint!', 'success');
+          this.cdr.detectChanges();
+        });
+      } else {
+        this.ngZone.run(() => {
+          this.jiraError = data.error || 'Failed to fetch Jira issues.';
+          this.addToast('Jira connection failed.', 'error');
+          this.cdr.detectChanges();
+        });
+      }
+    } catch (err: any) {
+      this.ngZone.run(() => {
+        this.jiraError = err.message || 'Network error connecting to Jira.';
+        this.addToast('Network error connecting to Jira.', 'error');
+        this.cdr.detectChanges();
+      });
+    } finally {
+      this.ngZone.run(() => {
+        this.isJiraLoading = false;
+        this.cdr.detectChanges();
+      });
+    }
+  }
+
+  handleImportJiraIssues() {
+    if (this.selectedJiraIssueIds.length === 0 || !this.socket) return;
+
+    const issuesToImport = this.jiraIssues.filter(issue => this.selectedJiraIssueIds.includes(issue.id));
+    
+    const newBacklogTickets = issuesToImport.map(issue => ({
+      id: issue.id,
+      title: issue.title,
+      desc: issue.desc,
+      estimate: null,
+      status: 'pending',
+      votesHistory: null,
+      average: null,
+      agreement: null
+    }));
+
+    const currentBacklog = this.backlog || [];
+    const uniqueNewTickets = newBacklogTickets.filter(
+      newTicket => !currentBacklog.some(existing => existing.id === newTicket.id)
+    );
+
+    if (uniqueNewTickets.length === 0) {
+      this.addToast('All selected Jira tickets are already in the backlog.', 'info');
+      return;
+    }
+
+    const updated = [...currentBacklog, ...uniqueNewTickets];
+    this.socket.emit('update-backlog', { backlog: updated });
+    
+    this.addToast(`Successfully imported ${uniqueNewTickets.length} Jira tickets!`, 'success');
+    
+    if (!this.taskInfo || this.taskInfo.id === 'INFO') {
+      const firstImported = uniqueNewTickets[0];
+      this.socket.emit('update-ticket', {
+        taskInfo: { id: firstImported.id, title: firstImported.title, desc: firstImported.desc }
+      });
+      const updatedWithActive = updated.map(item => {
+        if (item.id === firstImported.id) return { ...item, status: 'active' };
+        if (item.status === 'active') return { ...item, status: 'pending' };
+        return item;
+      });
+      this.socket.emit('update-backlog', { backlog: updatedWithActive });
+    }
+  }
+
+  handleJiraToggleSelectAll() {
+    if (this.selectedJiraIssueIds.length === this.jiraIssues.length) {
+      this.selectedJiraIssueIds = [];
+    } else {
+      this.selectedJiraIssueIds = this.jiraIssues.map(issue => issue.id);
+    }
+  }
+
+  handleJiraToggleSelect(id: string) {
+    if (this.selectedJiraIssueIds.includes(id)) {
+      this.selectedJiraIssueIds = this.selectedJiraIssueIds.filter(i => i !== id);
+    } else {
+      this.selectedJiraIssueIds.push(id);
+    }
+  }
+
+  handleJiraDisconnect() {
+    this.isJiraConnected = false;
+    this.jiraIssues = [];
+    this.selectedJiraIssueIds = [];
+    this.jiraError = '';
+    this.addToast('Jira connection closed.', 'info');
   }
 }

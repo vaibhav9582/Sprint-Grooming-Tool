@@ -278,19 +278,19 @@
     class="flex-1 max-w-[1500px] w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6 relative">
 
     <!-- Header -->
-    <header
-      class="flex justify-between items-center border-b border-slate-800 pb-4 gap-4 w-full">
+    <header class="flex justify-between items-center border-b border-slate-800 pb-4 gap-4 w-full">
       <div class="flex items-center gap-3">
         <span class="text-xl font-black flex items-center gap-2">
           <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-6 md:h-7 w-auto object-contain" />
-          <span class="bg-gradient-to-r from-indigo-500 to-indigo-650 bg-clip-text text-transparent tracking-wide hidden sm:inline-block">
+          <span
+            class="bg-gradient-to-r from-indigo-500 to-indigo-650 bg-clip-text text-transparent tracking-wide hidden sm:inline-block">
             Sprint Grooming Tool
           </span>
         </span>
         <span
-          class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-405 border border-indigo-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
-          <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
-          Active
+          class="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
+          <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+          Live
         </span>
       </div>
 
@@ -402,7 +402,7 @@
             </div>
           </div>
         </div>
-               <!-- Invite Member (Primary action button - hidden on small devices) -->
+        <!-- Invite Member (Primary action button - hidden on small devices) -->
         <button (click)="handleCopyInviteLink()"
           class="hidden lg:flex bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-1.5 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -936,18 +936,21 @@
               [ngClass]="selectedCard === val
                 ? 'bg-gradient-to-br from-indigo-500 to-indigo-650 border-amber-400 text-white shadow-xl shadow-indigo-500/20 -translate-y-3 scale-105 z-10'
                 : [getCardStyles(val).bg, getCardStyles(val).border, getCardStyles(val).hover, getCardStyles(val).text, 'hover:-translate-y-2 hover:shadow-lg hover:z-10']">
-              
+
               <!-- Top-left corner index -->
-              <span class="text-[9px] font-black self-start leading-none tracking-tight select-none opacity-80">{{val}}</span>
-              
+              <span
+                class="text-[9px] font-black self-start leading-none tracking-tight select-none opacity-80">{{val}}</span>
+
               <!-- Center large value -->
-              <span class="text-xl sm:text-2xl font-black self-center my-auto leading-none tracking-tighter select-none">
+              <span
+                class="text-xl sm:text-2xl font-black self-center my-auto leading-none tracking-tighter select-none">
                 {{val}}
               </span>
-              
+
               <!-- Bottom-right corner index (inverted) -->
-              <span class="text-[9px] font-black self-end leading-none tracking-tight select-none rotate-180 opacity-80">{{val}}</span>
-              
+              <span
+                class="text-[9px] font-black self-end leading-none tracking-tight select-none rotate-180 opacity-80">{{val}}</span>
+
               <!-- Active golden badge inside the card -->
               <span *ngIf="selectedCard === val"
                 class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow border border-white">
@@ -1106,156 +1109,284 @@
             </div>
           </div>
 
-          <!-- Host: Add ticket Form -->
-          <form *ngIf="userContext.isHost" (ngSubmit)="handleAddBacklogTicket($event)"
-            class="border-t border-slate-700 pt-4 space-y-2">
-            <span class="text-[9px] font-black text-slate-550 uppercase tracking-widest block mb-1">
-              Add Sprint Ticket
-            </span>
-            <input type="text" placeholder="Ticket key / Title (e.g. API Gateway)" [(ngModel)]="newTicketTitle"
-              name="newTicketTitle"
-              class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none transition-all duration-300 font-bold shadow-inner"
-              required />
-            <textarea placeholder="Short description details..." rows="2.5" [(ngModel)]="newTicketDesc"
-              name="newTicketDesc"
-              class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-605 focus:outline-none transition-all duration-300 font-medium shadow-inner"></textarea>
-            <button type="submit"
-              class="w-full bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="text-white">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M8 12h8" />
-                <path d="M12 8v8" />
-              </svg>
-              Add Ticket
-            </button>
-          </form>
-        </div>
+          <!-- Host: Add ticket Form with Tabs -->
+          <div *ngIf="userContext.isHost" class="border-t border-slate-700 pt-4 space-y-4">
+            <!-- Tabs for Manual vs Jira -->
+            <div class="flex border-b border-slate-800">
+              <button type="button" (click)="jiraTab = 'manual'"
+                class="flex-1 pb-2 text-[10px] font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer"
+                [ngClass]="jiraTab === 'manual' ? 'border-indigo-500 text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-400'">
+                Manual Entry
+              </button>
+              <button type="button" (click)="jiraTab = 'jira'"
+                class="flex-1 pb-2 text-[10px] font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer"
+                [ngClass]="jiraTab === 'jira' ? 'border-indigo-500 text-indigo-400' : 'border-transparent text-slate-500 hover:text-slate-400'">
+                Jira Sync
+              </button>
+            </div>
 
-        <!-- Sleek Discussion Timer Widget -->
-        <div *ngIf="taskInfo"
-          class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all">
-          <h3
-            class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
-            <span class="flex items-center gap-1.5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="text-indigo-400">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              ⏱️ Discussion Timer
-            </span>
-            <span class="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded"
-              [ngClass]="isTimerRunning ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-slate-955 text-slate-500 border border-slate-850'">
-              {{isTimerRunning ? 'Running' : 'Paused'}}
-            </span>
-          </h3>
+            <!-- Manual Form -->
+            <form *ngIf="jiraTab === 'manual'" (ngSubmit)="handleAddBacklogTicket($event)" class="space-y-2">
+              <span class="text-[9px] font-black text-slate-550 uppercase tracking-widest block mb-1">
+                Add Sprint Ticket
+              </span>
+              <input type="text" placeholder="Ticket key / Title (e.g. API Gateway)" [(ngModel)]="newTicketTitle"
+                name="newTicketTitle"
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none transition-all duration-300 font-bold shadow-inner"
+                required />
+              <textarea placeholder="Short description details..." rows="2.5" [(ngModel)]="newTicketDesc"
+                name="newTicketDesc"
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-605 focus:outline-none transition-all duration-300 font-medium shadow-inner"></textarea>
+              <button type="submit"
+                class="w-full bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-white">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M8 12h8" />
+                  <path d="M12 8v8" />
+                </svg>
+                Add Ticket
+              </button>
+            </form>
 
-          <div class="flex items-center justify-between w-full gap-4 mb-4">
-            <div class="flex items-center gap-3">
-              <div class="p-2.5 rounded-xl"
-                [ngClass]="isTimerRunning ? 'bg-indigo-500/20 text-indigo-400 animate-pulse' : 'bg-slate-950 text-slate-500'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            <!-- Jira Form/Panel -->
+            <div *ngIf="jiraTab === 'jira'" class="space-y-3">
+              <!-- Credentials block if not connected -->
+              <div *ngIf="!isJiraConnected" class="space-y-2">
+                <div class="flex items-center gap-2 select-none mb-1">
+                  <input type="checkbox" id="jira-demo-mode" [(ngModel)]="isJiraDemo" name="isJiraDemo"
+                    class="w-3.5 h-3.5 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
+                  <label for="jira-demo-mode" class="text-[10px] text-slate-400 font-bold cursor-pointer">
+                    Enable Demo mode (mock data)
+                  </label>
+                </div>
+
+                <div *ngIf="!isJiraDemo" class="space-y-2">
+                  <div>
+                    <label class="text-[9px] text-slate-500 font-bold block mb-1">JIRA HOST URL</label>
+                    <input type="text" [(ngModel)]="jiraHost" name="jiraHost"
+                      class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-3.5 py-1.5 text-xs text-slate-200 focus:outline-none font-bold" />
+                  </div>
+                  <div>
+                    <label class="text-[9px] text-slate-500 font-bold block mb-1">JIRA EMAIL</label>
+                    <input type="email" [(ngModel)]="jiraEmail" name="jiraEmail" placeholder="yourname@company.com"
+                      class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-3.5 py-1.5 text-xs text-slate-200 focus:outline-none font-bold" />
+                  </div>
+                  <div>
+                    <label class="text-[9px] text-slate-500 font-bold block mb-1">JIRA API TOKEN</label>
+                    <input type="password" [(ngModel)]="jiraToken" name="jiraToken" placeholder="ATATT3xA..."
+                      class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-3.5 py-1.5 text-xs text-slate-200 focus:outline-none font-bold" />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-[9px] text-slate-500 font-bold block mb-1">SPRINT ID or SPRINT KEY</label>
+                  <input type="text" [(ngModel)]="jiraSprintId" name="jiraSprintId"
+                    [placeholder]="isJiraDemo ? 'e.g. demo-sprint' : 'e.g. 42'"
+                    class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-3.5 py-1.5 text-xs text-slate-200 focus:outline-none font-bold" />
+                </div>
+
+                <div *ngIf="jiraError"
+                  class="p-2 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-xl text-[10px] font-semibold">
+                  {{ jiraError }}
+                </div>
+
+                <button type="button" [disabled]="isJiraLoading" (click)="handleJiraConnectAndFetch()"
+                  class="w-full bg-indigo-500 hover:bg-indigo-650 disabled:opacity-50 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
+                  <svg *ngIf="isJiraLoading" class="animate-spin h-3.5 w-3.5 text-white" fill="none"
+                    viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                  </svg>
+                  <span>{{ isJiraLoading ? 'Syncing...' : 'Sync Jira Sprint' }}</span>
+                </button>
+              </div>
+
+              <!-- List of issues if connected -->
+              <div *ngIf="isJiraConnected" class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] text-slate-400 font-bold">
+                    Fetched: {{ jiraIssues.length }} issues
+                  </span>
+                  <button type="button" (click)="handleJiraDisconnect()"
+                    class="text-[9px] text-rose-400 hover:text-rose-350 underline font-bold cursor-pointer bg-transparent border-none p-0">
+                    Disconnect
+                  </button>
+                </div>
+
+                <!-- Select All toggle -->
+                <div *ngIf="jiraIssues.length > 0"
+                  class="flex items-center gap-2 select-none p-1.5 bg-slate-950/40 rounded-lg border border-slate-900">
+                  <input type="checkbox" id="jira-select-all"
+                    [checked]="selectedJiraIssueIds.length === jiraIssues.length" (change)="handleJiraToggleSelectAll()"
+                    class="w-3.5 h-3.5 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
+                  <label for="jira-select-all"
+                    class="text-[10px] text-slate-300 font-bold cursor-pointer flex-1 text-left">
+                    Select All
+                  </label>
+                </div>
+
+                <!-- Scrollable issue list -->
+                <div class="max-h-48 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
+                  <div *ngFor="let issue of jiraIssues"
+                    class="flex items-start gap-2.5 p-2 rounded-xl border border-slate-850 bg-slate-950/60 hover:bg-slate-950 transition-colors">
+                    <input type="checkbox" [id]="'jira-issue-' + issue.id"
+                      [checked]="selectedJiraIssueIds.includes(issue.id)" (change)="handleJiraToggleSelect(issue.id)"
+                      class="w-3.5 h-3.5 mt-0.5 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
+                    <label [for]="'jira-issue-' + issue.id" class="text-[10px] text-left cursor-pointer flex-1 min-w-0">
+                      <div class="font-black text-indigo-400 font-mono">{{ issue.id }}</div>
+                      <div class="font-bold text-slate-200 truncate mt-0.5">{{ issue.title }}</div>
+                      <div class="text-[9px] text-slate-500 truncate font-semibold mt-0.5" *ngIf="issue.desc">{{
+                        issue.desc }}</div>
+                    </label>
+                  </div>
+                  <div *ngIf="jiraIssues.length === 0" class="text-center py-4 text-[10px] text-slate-500 font-bold">
+                    No open issues found in this sprint.
+                  </div>
+                </div>
+
+                <!-- Import button -->
+                <button type="button" [disabled]="selectedJiraIssueIds.length === 0" (click)="handleImportJiraIssues()"
+                  class="w-full bg-emerald-600 hover:bg-emerald-550 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-white">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" x2="12" y1="15" y2="3" />
+                  </svg>
+                  <span>Import ({{ selectedJiraIssueIds.length }}) Selected</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sleek Discussion Timer Widget -->
+          <div *ngIf="taskInfo"
+            class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all mt-6">
+            <h3
+              class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="text-indigo-400">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
                 </svg>
+                ⏱️ Discussion Timer
+              </span>
+              <span class="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded"
+                [ngClass]="isTimerRunning ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-slate-955 text-slate-500 border border-slate-850'">
+                {{isTimerRunning ? 'Running' : 'Paused'}}
+              </span>
+            </h3>
+
+            <div class="flex items-center justify-between w-full gap-4 mb-4">
+              <div class="flex items-center gap-3">
+                <div class="p-2.5 rounded-xl"
+                  [ngClass]="isTimerRunning ? 'bg-indigo-500/20 text-indigo-400 animate-pulse' : 'bg-slate-950 text-slate-500'">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-indigo-400">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none mb-1">Time
+                    Remaining</span>
+                  <span class="text-2xl font-black font-mono leading-none"
+                    [ngClass]="isTimerRunning ? 'text-indigo-400' : 'text-slate-355'">
+                    {{ timerMinutes }}:{{ timerSecondsPadded }}
+                  </span>
+                </div>
               </div>
-              <div class="flex flex-col">
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none mb-1">Time
-                  Remaining</span>
-                <span class="text-2xl font-black font-mono leading-none"
-                  [ngClass]="isTimerRunning ? 'text-indigo-400' : 'text-slate-355'">
-                  {{ timerMinutes }}:{{ timerSecondsPadded }}
-                </span>
+
+              <!-- Host Timer controls -->
+              <div *ngIf="userContext.isHost" class="flex items-center gap-2">
+                <button type="button" (click)="isTimerRunning ? handleTimerPause() : handleTimerStart()"
+                  class="p-2 rounded-xl text-white transition-all active:scale-90 cursor-pointer shadow-md"
+                  [ngClass]="isTimerRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-indigo-650 hover:bg-indigo-600'"
+                  [title]="isTimerRunning ? 'Pause Timer' : 'Start Timer'">
+                  <svg *ngIf="isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="text-white">
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                  <svg *ngIf="!isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="text-white">
+                    <polygon points="6 3 20 12 6 21 6 3" />
+                  </svg>
+                </button>
+
+                <button type="button" (click)="handleTimerReset()"
+                  class="p-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-slate-202 border border-slate-850 transition-all active:scale-90 cursor-pointer"
+                  title="Reset Timer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-slate-400">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8" />
+                    <path d="M21 3v5h-5" />
+                  </svg>
+                </button>
               </div>
             </div>
 
-            <!-- Host Timer controls -->
-            <div *ngIf="userContext.isHost" class="flex items-center gap-2">
-              <button type="button" (click)="isTimerRunning ? handleTimerPause() : handleTimerStart()"
-                class="p-2 rounded-xl text-white transition-all active:scale-90 cursor-pointer shadow-md"
-                [ngClass]="isTimerRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-indigo-650 hover:bg-indigo-600'"
-                [title]="isTimerRunning ? 'Pause Timer' : 'Start Timer'">
-                <svg *ngIf="isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" class="text-white">
-                  <rect x="14" y="4" width="4" height="16" rx="1" />
-                  <rect x="6" y="4" width="4" height="16" rx="1" />
-                </svg>
-                <svg *ngIf="!isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round" class="text-white">
-                  <polygon points="6 3 20 12 6 21 6 3" />
-                </svg>
-              </button>
-
-              <button type="button" (click)="handleTimerReset()"
-                class="p-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-slate-202 border border-slate-850 transition-all active:scale-90 cursor-pointer"
-                title="Reset Timer">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="text-slate-400">
-                  <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8" />
-                  <path d="M21 3v5h-5" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <!-- Presets for Host -->
-          <div *ngIf="userContext.isHost"
-            class="flex items-center gap-2 pt-3.5 border-t border-slate-850 w-full justify-between">
-            <span class="text-[10px] font-bold text-slate-500 font-semibold">Presets:</span>
-            <div class="flex gap-1.5">
-              <button *ngFor="let sec of [30, 60, 90, 120]" type="button"
-                (click)="customTimerInput = sec.toString(); timerSeconds = sec; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: sec })"
-                class="text-[10px] font-bold px-2 py-1 rounded-lg transition-all active:scale-95 cursor-pointer border"
-                [ngClass]="(timerSeconds === sec && !isTimerRunning) 
+            <!-- Presets for Host -->
+            <div *ngIf="userContext.isHost"
+              class="flex items-center gap-2 pt-3.5 border-t border-slate-850 w-full justify-between">
+              <span class="text-[10px] font-bold text-slate-500 font-semibold">Presets:</span>
+              <div class="flex gap-1.5">
+                <button *ngFor="let sec of [30, 60, 90, 120]" type="button"
+                  (click)="customTimerInput = sec.toString(); timerSeconds = sec; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: sec })"
+                  class="text-[10px] font-bold px-2 py-1 rounded-lg transition-all active:scale-95 cursor-pointer border"
+                  [ngClass]="(timerSeconds === sec && !isTimerRunning) 
                   ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' 
                   : 'bg-slate-955 hover:bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-850'">
-                {{sec}}s
-              </button>
-            </div>
+                  {{sec}}s
+                </button>
+              </div>
 
-            <div class="flex items-center bg-slate-955 border border-slate-850 rounded-lg px-2 py-1 max-w-[60px]">
-              <input type="number" min="10" max="600" [(ngModel)]="customTimerInput"
-                (ngModelChange)="timerSeconds = $event; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: $event })"
-                class="w-full bg-transparent border-none text-[10px] text-indigo-400 font-bold focus:outline-none text-center"
-                title="Custom seconds" />
+              <div class="flex items-center bg-slate-955 border border-slate-850 rounded-lg px-2 py-1 max-w-[60px]">
+                <input type="number" min="10" max="600" [(ngModel)]="customTimerInput"
+                  (ngModelChange)="timerSeconds = $event; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: $event })"
+                  class="w-full bg-transparent border-none text-[10px] text-indigo-400 font-bold focus:outline-none text-center"
+                  title="Custom seconds" />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Settings Modal overlay -->
-  <div *ngIf="isSettingsOpen"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left">
-      <h3 class="text-base font-black text-slate-100 flex items-center justify-between mb-4">
-        <span class="flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-            class="text-indigo-400">
-            <path
-              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-          Room & Profile Settings
-        </span>
-        <span
-          class="text-xs font-mono text-slate-404 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800 flex items-center gap-1.5 font-bold">
-          <span>Room:</span>
-          <span class="text-indigo-400 font-black">{{userContext.roomId}}</span>
-        </span>
-      </h3>
+    <!-- Settings Modal overlay -->
+    <div *ngIf="isSettingsOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+      <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left">
+        <h3 class="text-base font-black text-slate-100 flex items-center justify-between mb-4">
+          <span class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-indigo-400">
+              <path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            Room & Profile Settings
+          </span>
+          <span
+            class="text-xs font-mono text-slate-404 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800 flex items-center gap-1.5 font-bold">
+            <span>Room:</span>
+            <span class="text-indigo-400 font-black">{{userContext.roomId}}</span>
+          </span>
+        </h3>
 
-      <form (ngSubmit)="
+        <form (ngSubmit)="
           isSettingsOpen = false;
           (userContext.isHost && settingsTitle.trim() ? handleSaveSettingsTask(settingsTitle, settingsDesc) : null);
           (settingsRole !== userContext.role ? handleUpdateRole(settingsRole) : null);
@@ -1263,160 +1394,161 @@
           addToast('Settings applied successfully!', 'success')
         " class="space-y-4">
 
-        <!-- Profile Settings (All players) -->
-        <div class="space-y-1.5 border-b border-slate-800 pb-4">
-          <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">My Profile</span>
-          <label class="text-xs text-slate-400 font-semibold block">Your Seating Role</label>
-          <div class="grid grid-cols-2 gap-2.5">
-            <button type="button" (click)="settingsRole = 'Estimator'"
-              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Estimator' 
+          <!-- Profile Settings (All players) -->
+          <div class="space-y-1.5 border-b border-slate-800 pb-4">
+            <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">My Profile</span>
+            <label class="text-xs text-slate-400 font-semibold block">Your Seating Role</label>
+            <div class="grid grid-cols-2 gap-2.5">
+              <button type="button" (click)="settingsRole = 'Estimator'"
+                class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Estimator' 
                 ? 'border-indigo-500 bg-indigo-500/10 text-indigo-300' 
                 : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'">
-              Estimator (Vote)
-            </button>
-            <button type="button" (click)="settingsRole = 'Spectator'"
-              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Spectator' 
+                Estimator (Vote)
+              </button>
+              <button type="button" (click)="settingsRole = 'Spectator'"
+                class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Spectator' 
                 ? 'border-indigo-500 bg-indigo-500/10 text-indigo-300' 
                 : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'">
-              Spectator (Observe)
+                Spectator (Observe)
+              </button>
+            </div>
+          </div>
+
+          <!-- Host Settings -->
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">Host Controls</span>
+              <span *ngIf="!userContext.isHost"
+                class="text-[9px] bg-slate-950/60 text-slate-500 border border-slate-850 px-1.5 py-0.5 rounded font-bold">
+                ReadOnly (Host Only)
+              </span>
+            </div>
+
+            <!-- Deck Mode Selection -->
+            <div class="space-y-1.5">
+              <label class="text-xs text-slate-400 font-semibold block">Deck Size/Type</label>
+              <select [disabled]="!userContext.isHost" [(ngModel)]="settingsDeck" name="settingsDeck"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-202 focus:outline-none focus:border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium">
+                <option value="Fibonacci">Fibonacci</option>
+                <option value="TShirt">T-Shirt Sizing</option>
+                <option value="Sequential">Sequential (1-10)</option>
+              </select>
+            </div>
+
+            <!-- Ticket Title & Desc -->
+            <div class="space-y-3">
+              <div class="space-y-1.5">
+                <label class="text-xs text-slate-400 font-semibold block">Ticket Title</label>
+                <input [disabled]="!userContext.isHost" type="text" [(ngModel)]="settingsTitle" name="settingsTitle"
+                  placeholder="Enter ticket title..."
+                  class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-inner" />
+              </div>
+              <div class="space-y-1.5">
+                <label class="text-xs text-slate-400 font-semibold block">Ticket Description</label>
+                <textarea [disabled]="!userContext.isHost" rows="2.5" [(ngModel)]="settingsDesc" name="settingsDesc"
+                  placeholder="Enter ticket details..."
+                  class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-medium shadow-inner"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex gap-2 pt-4">
+            <button type="button" (click)="isSettingsOpen = false"
+              class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center font-bold">
+              Cancel
+            </button>
+            <button type="submit"
+              class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
+              Apply Settings
             </button>
           </div>
-        </div>
+        </form>
+      </div>
+    </div>
 
-        <!-- Host Settings -->
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">Host Controls</span>
-            <span *ngIf="!userContext.isHost"
-              class="text-[9px] bg-slate-950/60 text-slate-500 border border-slate-850 px-1.5 py-0.5 rounded font-bold">
-              ReadOnly (Host Only)
-            </span>
-          </div>
+    <!-- Edit Profile Modal overlay -->
+    <div *ngIf="isProfileOpen" (click)="isProfileOpen = false"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-955/80 backdrop-blur-md">
+      <div (click)="$event.stopPropagation()"
+        class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left animate-toast-slide-in">
+        <h3 class="text-base font-black text-slate-100 flex items-center gap-2 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-400">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          Edit Profile
+        </h3>
 
-          <!-- Deck Mode Selection -->
+        <form (ngSubmit)="handleSaveProfile()" class="space-y-4">
           <div class="space-y-1.5">
-            <label class="text-xs text-slate-400 font-semibold block">Deck Size/Type</label>
-            <select [disabled]="!userContext.isHost" [(ngModel)]="settingsDeck" name="settingsDeck"
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-202 focus:outline-none focus:border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium">
-              <option value="Fibonacci">Fibonacci</option>
-              <option value="TShirt">T-Shirt Sizing</option>
-              <option value="Sequential">Sequential (1-10)</option>
-            </select>
+            <label class="text-xs text-slate-400 font-semibold block">Display Name</label>
+            <input type="text" [(ngModel)]="profileName" name="profileName" placeholder="Enter your name..."
+              class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none transition-all duration-300 font-bold shadow-inner"
+              required />
           </div>
 
-          <!-- Ticket Title & Desc -->
-          <div class="space-y-3">
-            <div class="space-y-1.5">
-              <label class="text-xs text-slate-400 font-semibold block">Ticket Title</label>
-              <input [disabled]="!userContext.isHost" type="text" [(ngModel)]="settingsTitle" name="settingsTitle"
-                placeholder="Enter ticket title..."
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-inner" />
-            </div>
-            <div class="space-y-1.5">
-              <label class="text-xs text-slate-400 font-semibold block">Ticket Description</label>
-              <textarea [disabled]="!userContext.isHost" rows="2.5" [(ngModel)]="settingsDesc" name="settingsDesc"
-                placeholder="Enter ticket details..."
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-medium shadow-inner"></textarea>
-            </div>
+          <div class="flex gap-2 pt-2">
+            <button type="button" (click)="isProfileOpen = false"
+              class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center font-bold">
+              Cancel
+            </button>
+            <button type="submit"
+              class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
+              Save Name
+            </button>
           </div>
-        </div>
-
-        <!-- Actions -->
-        <div class="flex gap-2 pt-4">
-          <button type="button" (click)="isSettingsOpen = false"
-            class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center font-bold">
-            Cancel
-          </button>
-          <button type="submit"
-            class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
-            Apply Settings
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Edit Profile Modal overlay -->
-  <div *ngIf="isProfileOpen" (click)="isProfileOpen = false"
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-955/80 backdrop-blur-md">
-    <div (click)="$event.stopPropagation()"
-      class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left animate-toast-slide-in">
-      <h3 class="text-base font-black text-slate-100 flex items-center gap-2 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400">
-          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" />
-        </svg>
-        Edit Profile
-      </h3>
-
-      <form (ngSubmit)="handleSaveProfile()" class="space-y-4">
-        <div class="space-y-1.5">
-          <label class="text-xs text-slate-400 font-semibold block">Display Name</label>
-          <input type="text" [(ngModel)]="profileName" name="profileName" placeholder="Enter your name..."
-            class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none transition-all duration-300 font-bold shadow-inner"
-            required />
-        </div>
-
-        <div class="flex gap-2 pt-2">
-          <button type="button" (click)="isProfileOpen = false"
-            class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center font-bold">
-            Cancel
-          </button>
-          <button type="submit"
-            class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
-            Save Name
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="py-4 border-t border-slate-800 bg-slate-955 text-center text-[12px] text-slate-200">
-    <div class="flex items-center justify-center gap-1.5">
-      <div class='flex items-center text-[12px] gap-2'>
-        <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-5 w-auto object-contain" />
-        <span>Sprint Grooming Tool</span>
-        <span>•</span>
-        <span>Enterprise Sprint Planning Suite</span>
+        </form>
       </div>
     </div>
-  </footer>
 
-  <!-- Toast Notification Container -->
-  <div
-    class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9999] space-y-2 pointer-events-none max-w-md sm:max-w-sm w-auto sm:w-full">
-    <div *ngFor="let t of toasts" (click)="removeToast(t.id)"
-      class="p-4 rounded-2xl border shadow-xl flex items-center gap-3 transition-all duration-300 animate-toast-slide-in pointer-events-auto bg-slate-900 border-slate-800 cursor-pointer hover:border-slate-700/80 active:scale-[0.98] select-none"
-      title="Click to dismiss">
-      <div class="flex-shrink-0">
-        <svg *ngIf="t.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="text-emerald-500">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-          <polyline points="22 4 12 14.01 9 11.01" />
-        </svg>
-        <svg *ngIf="t.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="text-rose-500">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" x2="12" y1="8" y2="12" />
-          <line x1="12" x2="12.01" y1="16" y2="16" />
-        </svg>
-        <svg *ngIf="t.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          class="text-indigo-500 animate-pulse">
-          <path
-            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
-          <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
-          <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
-        </svg>
+    <!-- Footer -->
+    <footer class="py-4 border-t border-slate-800 bg-slate-955 text-center text-[12px] text-slate-200">
+      <div class="flex items-center justify-center gap-1.5">
+        <div class='flex items-center text-[12px] gap-2'>
+          <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-5 w-auto object-contain" />
+          <span>Sprint Grooming Tool</span>
+          <span>•</span>
+          <span>Enterprise Sprint Planning Suite</span>
+        </div>
       </div>
-      <div class="flex-1">
-        <p class="text-xs font-bold text-slate-200 leading-snug">{{t.message}}</p>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div
+      class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9999] space-y-2 pointer-events-none max-w-md sm:max-w-sm w-auto sm:w-full">
+      <div *ngFor="let t of toasts" (click)="removeToast(t.id)"
+        class="p-4 rounded-2xl border shadow-xl flex items-center gap-3 transition-all duration-300 animate-toast-slide-in pointer-events-auto bg-slate-900 border-slate-800 cursor-pointer hover:border-slate-700/80 active:scale-[0.98] select-none"
+        title="Click to dismiss">
+        <div class="flex-shrink-0">
+          <svg *ngIf="t.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="text-emerald-500">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          <svg *ngIf="t.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-rose-500">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+          </svg>
+          <svg *ngIf="t.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-500 animate-pulse">
+            <path
+              d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+            <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
+            <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
+          </svg>
+        </div>
+        <div class="flex-1">
+          <p class="text-xs font-bold text-slate-200 leading-snug">{{t.message}}</p>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+  </div>
