@@ -1,30 +1,47 @@
 <div class="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-650/30">
-  
+
   <!-- PERFECT CONSENSUS CONFETTI DUST -->
-  <canvas #confettiCanvas *ngIf="isConsensusReached" class="pointer-events-none fixed inset-0 z-[100] w-full h-full"></canvas>
+  <canvas #confettiCanvas *ngIf="isConsensusReached"
+    class="pointer-events-none fixed inset-0 z-[100] w-full h-full"></canvas>
 
   <!-- LOBBY SCREEN -->
   <div *ngIf="currentScreen === 'home'" class="flex-1 flex flex-col min-h-screen">
     <!-- Glassmorphic Navbar -->
-    <nav class="w-full bg-slate-900/50 backdrop-blur-md border-b border-slate-800/80 py-4 px-6 md:px-12 flex items-center justify-between z-50 sticky top-0">
+    <nav
+      class="w-full bg-slate-900/50 backdrop-blur-md border-b border-slate-800/80 py-4 px-6 md:px-12 flex items-center justify-between z-50 sticky top-0">
       <div class="flex items-center gap-3">
         <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-8 md:h-9 w-auto object-contain" />
         <div class="h-5 w-px bg-slate-880"></div>
-        <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest hidden sm:inline-block">Sprint Grooming Tool</span>
+        <span class="text-[11px] font-black text-slate-400 uppercase tracking-widest hidden sm:inline-block">Sprint
+          Grooming Tool</span>
       </div>
       <div class="flex items-center gap-3.5">
-        <button
-          (click)="toggleTheme()"
+        <button (click)="toggleTheme()"
           class="bg-slate-900/80 hover:bg-slate-850 border border-slate-800 p-2 rounded-xl text-slate-400 hover:text-slate-200 transition-all cursor-pointer flex items-center justify-center shadow-sm"
-          aria-label="Toggle Theme"
-          [title]="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-        >
+          aria-label="Toggle Theme" [title]="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
           <!-- Sun Icon -->
-          <svg *ngIf="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+          <svg *ngIf="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-amber-500">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+          </svg>
           <!-- Moon Icon -->
-          <svg *ngIf="theme !== 'dark'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-405"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          <svg *ngIf="theme !== 'dark'" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-405">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
         </button>
-        <span class="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-inner">
+        <span
+          class="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[10px] font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-inner">
           <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
           Active Room System
         </span>
@@ -32,32 +49,53 @@
     </nav>
 
     <!-- Main Layout Grid -->
-    <main class="flex-1 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 items-center justify-center p-6 md:p-12 lg:p-16 gap-12 lg:gap-16 relative overflow-hidden">
-      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <main
+      class="flex-1 max-w-[1400px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 items-center justify-center p-6 md:p-12 lg:p-16 gap-12 lg:gap-16 relative overflow-hidden">
+      <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none">
+      </div>
+      <div
+        class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[140px] pointer-events-none">
+      </div>
 
       <!-- Left Column: Hero Details -->
       <div class="lg:col-span-7 relative z-10 flex flex-col items-start text-left space-y-6">
-        <div class="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-indigo-400 font-bold shadow-xl">
+        <div
+          class="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-indigo-400 font-bold shadow-xl">
           <!-- Sparkles Icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400 animate-spin-slow"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-400 animate-spin-slow">
+            <path
+              d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+            <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
+            <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
+          </svg>
           Enterprise Agile Collaboration
         </div>
-        
+
         <h1 class="text-4xl md:text-6xl font-black tracking-tight leading-tight flex flex-wrap items-center gap-3.5">
           <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-10 md:h-16 w-auto object-contain" />
-          <span class="bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text text-transparent">Sprint Grooming Tool</span>
+          <span class="bg-gradient-to-r from-indigo-400 to-indigo-600 bg-clip-text text-transparent">Sprint Grooming
+            Tool</span>
         </h1>
-        
+
         <p class="text-slate-450 text-sm md:text-base leading-relaxed max-w-xl">
-          Accelerate delivery. Align complexity. Deliver high-velocity sprint planning and estimation sessions with absolute certainty. Perfect consensus starts here.
+          Accelerate delivery. Align complexity. Deliver high-velocity sprint planning and estimation sessions with
+          absolute certainty. Perfect consensus starts here.
         </p>
 
         <!-- Feature Showcase Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4.5 pt-4 w-full max-w-xl">
           <div class="flex items-start gap-3 bg-slate-900/40 border border-slate-800/50 p-3.5 rounded-2xl">
             <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path
+                  d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+                <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
+                <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
+              </svg>
             </div>
             <div>
               <h4 class="text-xs font-bold text-slate-200">Real-time Sync</h4>
@@ -67,7 +105,14 @@
 
           <div class="flex items-start gap-3 bg-slate-900/40 border border-slate-800/50 p-3.5 rounded-2xl">
             <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
             </div>
             <div>
               <h4 class="text-xs font-bold text-slate-200">Consensus Engine</h4>
@@ -77,7 +122,15 @@
 
           <div class="flex items-start gap-3 bg-slate-900/40 border border-slate-800/50 p-3.5 rounded-2xl">
             <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                <path d="M10 9H8" />
+                <path d="M16 13H8" />
+                <path d="M16 17H8" />
+              </svg>
             </div>
             <div>
               <h4 class="text-xs font-bold text-slate-200">Estimation Decks</h4>
@@ -87,7 +140,15 @@
 
           <div class="flex items-start gap-3 bg-slate-900/40 border border-slate-800/50 p-3.5 rounded-2xl">
             <div class="bg-indigo-500/10 text-indigo-400 p-2 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6v3.5c0 1.66-2 3.5-6 3.5s-6-1.84-6-3.5V8a6 6 0 0 1 6-6Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                <path d="M4 22h16" />
+                <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+                <path d="M12 2a6 6 0 0 1 6 6v3.5c0 1.66-2 3.5-6 3.5s-6-1.84-6-3.5V8a6 6 0 0 1 6-6Z" />
+              </svg>
             </div>
             <div>
               <h4 class="text-xs font-bold text-slate-200">Advanced Reporting</h4>
@@ -99,36 +160,34 @@
 
       <!-- Right Column: Setup Panel -->
       <div class="lg:col-span-5 relative z-10 w-full flex justify-center">
-        <div class="w-full max-w-md bg-slate-900/90 border border-slate-800/80 p-6 md:p-8 rounded-3xl shadow-2xl backdrop-blur-xl transition-all duration-300">
-          <div *ngIf="inviteRoomFound" class="mb-6 p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-xl text-xs flex items-center gap-2 justify-center font-bold">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+        <div
+          class="w-full max-w-md bg-slate-900/90 border border-slate-800/80 p-6 md:p-8 rounded-3xl shadow-2xl backdrop-blur-xl transition-all duration-300">
+          <div *ngIf="inviteRoomFound"
+            class="mb-6 p-3 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-xl text-xs flex items-center gap-2 justify-center font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-indigo-400">
+              <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+              <path d="M15 7h2a5 5 0 0 1 0 10h-2" />
+              <line x1="8" x2="16" y1="12" y2="12" />
+            </svg>
             Invite Room Link Detected: Auto-Joining Room "{{roomIdInput}}"
           </div>
-          
+
           <!-- Tabs -->
           <div class="flex border-b border-slate-800 mb-6">
-            <button
-              type="button"
-              (click)="lobbyTab = 'create'"
+            <button type="button" (click)="lobbyTab = 'create'"
               class="flex-1 pb-3 text-xs font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer"
-              [class.border-indigo-500]="lobbyTab === 'create'"
-              [class.text-indigo-500]="lobbyTab === 'create'"
-              [class.border-transparent]="lobbyTab !== 'create'"
-              [class.text-slate-400]="lobbyTab !== 'create'"
-              [class.hover:text-slate-200]="lobbyTab !== 'create'"
-            >
+              [class.border-indigo-500]="lobbyTab === 'create'" [class.text-indigo-500]="lobbyTab === 'create'"
+              [class.border-transparent]="lobbyTab !== 'create'" [class.text-slate-400]="lobbyTab !== 'create'"
+              [class.hover:text-slate-200]="lobbyTab !== 'create'">
               Create Session
             </button>
-            <button
-              type="button"
-              (click)="lobbyTab = 'join'"
+            <button type="button" (click)="lobbyTab = 'join'"
               class="flex-1 pb-3 text-xs font-black uppercase tracking-wider text-center border-b-2 transition-all cursor-pointer"
-              [class.border-indigo-500]="lobbyTab === 'join'"
-              [class.text-indigo-500]="lobbyTab === 'join'"
-              [class.border-transparent]="lobbyTab !== 'join'"
-              [class.text-slate-400]="lobbyTab !== 'join'"
-              [class.hover:text-slate-200]="lobbyTab !== 'join'"
-            >
+              [class.border-indigo-500]="lobbyTab === 'join'" [class.text-indigo-500]="lobbyTab === 'join'"
+              [class.border-transparent]="lobbyTab !== 'join'" [class.text-slate-400]="lobbyTab !== 'join'"
+              [class.hover:text-slate-200]="lobbyTab !== 'join'">
               Join Session
             </button>
           </div>
@@ -137,35 +196,23 @@
           <div *ngIf="lobbyTab === 'create'" class="space-y-4">
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Session / Sprint Name</label>
-              <input
-                type="text"
-                [(ngModel)]="sessionName"
-                placeholder="e.g. Sprint 26 Grooming"
-                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
-              />
+              <input type="text" [(ngModel)]="sessionName" placeholder="e.g. Sprint 26 Grooming"
+                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
             </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Your Display Name</label>
-              <input
-                type="text"
-                [(ngModel)]="name"
-                (ngModelChange)="errors.name = ''"
-                placeholder="e.g. Nikita"
+              <input type="text" [(ngModel)]="name" (ngModelChange)="errors.name = ''" placeholder="e.g. Nikita"
                 class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
-                [class.border-rose-500]="errors.name"
-                [class.border-slate-800]="!errors.name"
-                [class.focus:border-indigo-500]="!errors.name"
-              />
+                [class.border-rose-500]="errors.name" [class.border-slate-800]="!errors.name"
+                [class.focus:border-indigo-500]="!errors.name" />
               <span *ngIf="errors.name" class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.name}}</span>
             </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Deck Type</label>
-              <select
-                [(ngModel)]="deckType"
-                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium"
-              >
+              <select [(ngModel)]="deckType"
+                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
                 <option value="Fibonacci">Fibonacci</option>
                 <option value="TShirt">T-Shirt Sizing</option>
                 <option value="Sequential">Sequential (1-10)</option>
@@ -173,21 +220,15 @@
             </div>
 
             <div class="flex items-center gap-2.5 pt-2 select-none">
-              <input
-                type="checkbox"
-                id="spectator-create"
-                [(ngModel)]="joinAsSpectator"
-                class="w-4 h-4 rounded border-slate-800 text-indigo-505 focus:ring-indigo-500/30 cursor-pointer"
-              />
+              <input type="checkbox" id="spectator-create" [(ngModel)]="joinAsSpectator"
+                class="w-4 h-4 rounded border-slate-800 text-indigo-505 focus:ring-indigo-500/30 cursor-pointer" />
               <label htmlFor="spectator-create" class="text-xs text-slate-300 font-bold cursor-pointer">
                 Join as Spectator (observe session only)
               </label>
             </div>
 
-            <button
-              (click)="handleStartSession(true)"
-              class="w-full bg-indigo-500 hover:bg-indigo-650 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-sm"
-            >
+            <button (click)="handleStartSession(true)"
+              class="w-full bg-indigo-500 hover:bg-indigo-650 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-sm">
               🚀 Launch Session
             </button>
           </div>
@@ -196,50 +237,34 @@
           <div *ngIf="lobbyTab === 'join'" class="space-y-4">
             <div class="space-y-1.5">
               <label class="text-xs text-slate-405 font-bold block">Room ID</label>
-              <input
-                type="text"
-                [(ngModel)]="roomIdInput"
-                (ngModelChange)="errors.roomId = ''"
+              <input type="text" [(ngModel)]="roomIdInput" (ngModelChange)="errors.roomId = ''"
                 placeholder="e.g. EXL-A5B2F"
                 class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
-                [class.border-rose-500]="errors.roomId"
-                [class.border-slate-800]="!errors.roomId"
-                [class.focus:border-indigo-500]="!errors.roomId"
-              />
-              <span *ngIf="errors.roomId" class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.roomId}}</span>
+                [class.border-rose-500]="errors.roomId" [class.border-slate-800]="!errors.roomId"
+                [class.focus:border-indigo-500]="!errors.roomId" />
+              <span *ngIf="errors.roomId"
+                class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.roomId}}</span>
             </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-405 font-bold block">Your Display Name</label>
-              <input
-                type="text"
-                [(ngModel)]="name"
-                (ngModelChange)="errors.name = ''"
-                placeholder="e.g. Nikita"
+              <input type="text" [(ngModel)]="name" (ngModelChange)="errors.name = ''" placeholder="e.g. Nikita"
                 class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
-                [class.border-rose-500]="errors.name"
-                [class.border-slate-800]="!errors.name"
-                [class.focus:border-indigo-500]="!errors.name"
-              />
+                [class.border-rose-500]="errors.name" [class.border-slate-800]="!errors.name"
+                [class.focus:border-indigo-500]="!errors.name" />
               <span *ngIf="errors.name" class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.name}}</span>
             </div>
 
             <div class="flex items-center gap-2.5 pt-2 select-none">
-              <input
-                type="checkbox"
-                id="spectator-join"
-                [(ngModel)]="joinAsSpectator"
-                class="w-4 h-4 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer"
-              />
+              <input type="checkbox" id="spectator-join" [(ngModel)]="joinAsSpectator"
+                class="w-4 h-4 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
               <label htmlFor="spectator-join" class="text-xs text-slate-300 font-bold cursor-pointer">
                 Join as Spectator (observe session only)
               </label>
             </div>
 
-            <button
-              (click)="handleStartSession(false)"
-              class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-sm"
-            >
+            <button (click)="handleStartSession(false)"
+              class="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer text-sm">
               🔌 Connect to Session
             </button>
           </div>
@@ -249,10 +274,12 @@
   </div>
 
   <!-- ESTIMATION BOARD SCREEN -->
-  <div *ngIf="currentScreen === 'board'" class="flex-1 max-w-[1500px] w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6 relative">
-    
+  <div *ngIf="currentScreen === 'board'"
+    class="flex-1 max-w-[1500px] w-full mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-6 relative">
+
     <!-- Header -->
-    <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800 pb-4 gap-4 w-full">
+    <header
+      class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800 pb-4 gap-4 w-full">
       <div class="flex items-center gap-3">
         <span class="text-xl font-black flex items-center gap-2">
           <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-6 md:h-7 w-auto object-contain" />
@@ -260,7 +287,8 @@
             Sprint Grooming Tool
           </span>
         </span>
-        <span class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-405 border border-indigo-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
+        <span
+          class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-405 border border-indigo-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
           <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse"></span>
           Active
         </span>
@@ -268,48 +296,215 @@
 
       <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
         <!-- Theme Toggle -->
-        <button
-          (click)="toggleTheme()"
+        <button (click)="toggleTheme()"
           class="bg-slate-900 hover:bg-slate-855 text-slate-355 text-xs font-bold p-2 rounded-xl border border-slate-855 transition-all flex items-center justify-center cursor-pointer shadow-sm"
-          aria-label="Toggle Theme"
-          [title]="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
-        >
-          <svg *ngIf="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-          <svg *ngIf="theme !== 'dark'" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-405"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          aria-label="Toggle Theme" [title]="theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+          <svg *ngIf="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-amber-500">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+          </svg>
+          <svg *ngIf="theme !== 'dark'" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-405">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
         </button>
 
-        <!-- 1. Settings -->
-        <button
-          (click)="handleOpenSettings()"
-          class="bg-slate-900 hover:bg-slate-855 text-slate-355 text-xs font-bold py-1.5 px-3 rounded-xl border border-slate-855 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-          Settings
-        </button>
+        <!-- Connected Members Modal overlay -->
+        <div *ngIf="isMembersListOpen" (click)="isMembersListOpen = false"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-955/80 backdrop-blur-md">
+          <div (click)="$event.stopPropagation()"
+            class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left animate-toast-slide-in">
+            <h3 class="text-base font-black text-slate-100 flex items-center justify-between mb-4">
+              <span class="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-indigo-400">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                Connected Members
+              </span>
+              <span
+                class="text-xs font-mono text-slate-404 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800 flex items-center gap-1.5 font-bold">
+                <span>Active:</span>
+                <span class="text-indigo-400 font-black">{{participants.length}} Online</span>
+              </span>
+            </h3>
 
-        <!-- 2. Invite Member -->
-        <button
-          (click)="handleCopyInviteLink()"
-          class="bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-1.5 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+            <!-- Member rows list -->
+            <div class="space-y-3 max-h-[350px] overflow-y-auto pr-1 my-4">
+              <div *ngIf="participants.length === 0" class="text-xs text-slate-500 py-6 text-center font-medium">
+                No active players in room.
+              </div>
+              <div *ngFor="let p of participants"
+                class="flex items-center justify-between p-3 rounded-2xl bg-slate-955 border border-slate-800 hover:border-slate-700 transition-all shadow-inner">
+                <div class="flex items-center gap-3">
+                  <!-- Avatar -->
+                  <div class="relative flex-shrink-0">
+                    <div
+                      class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black border-2 bg-slate-950 shadow-inner"
+                      [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border]">
+                      {{p.avatar}}
+                    </div>
+                    <span *ngIf="p.isHost" class="absolute -top-2 -left-2 text-sm drop-shadow"
+                      title="Session Host">👑</span>
+                  </div>
+
+                  <!-- Name and Role -->
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-sm font-black text-slate-200 truncate max-w-[160px]" [title]="p.name">
+                      {{p.name}} <span *ngIf="p.isSelf" class="text-slate-500 font-bold text-[10px]">(You)</span>
+                    </span>
+                    <span class="text-[9px] text-slate-500 uppercase font-black tracking-wider leading-none mt-0.5">
+                      {{p.role}}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Status Badge -->
+                <div class="flex-shrink-0">
+                  <span *ngIf="p.role === 'Spectator'"
+                    class="text-[9px] bg-slate-955 text-slate-500 border border-slate-800 px-2.5 py-1 rounded-lg font-black uppercase tracking-wider">
+                    Observing
+                  </span>
+                  <ng-container *ngIf="p.role === 'Estimator'">
+                    <span *ngIf="p.vote === null"
+                      class="inline-flex items-center gap-1.5 text-[9px] bg-slate-955 text-slate-500 border border-slate-800 px-2.5 py-1 rounded-lg font-black uppercase tracking-wider animate-pulse">
+                      Thinking
+                    </span>
+                    <span *ngIf="p.vote !== null"
+                      class="inline-flex items-center gap-1.5 text-[9px] bg-emerald-500/10 text-emerald-450 border border-emerald-505/20 px-2.5 py-1 rounded-lg font-black uppercase tracking-wider">
+                      Voted
+                    </span>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+
+            <!-- Close Button -->
+            <div class="pt-4 border-t border-slate-800">
+              <button type="button" (click)="isMembersListOpen = false"
+                class="w-full bg-slate-950 hover:bg-slate-855 text-slate-400 hover:text-slate-200 border border-slate-800 rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center font-bold">
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invite Member (Primary action button) -->
+        <button (click)="handleCopyInviteLink()"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-1.5 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+            <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+            <path d="M15 7h2a5 5 0 0 1 0 10h-2" />
+            <line x1="8" x2="16" y1="12" y2="12" />
+          </svg>
           {{copiedLink ? 'Link Copied!' : 'Invite Member'}}
         </button>
 
-        <!-- 3. Leave Room -->
-        <button
-          (click)="handleLeaveRoom()"
-          class="bg-slate-900 hover:bg-slate-855 text-slate-355 text-xs font-bold py-1.5 px-3 rounded-xl border border-slate-855 transition-all flex items-center gap-1.5 cursor-pointer"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-          Leave Room
+        <!-- Toggle Dropdown Menu Button -->
+        <div class="relative inline-block text-left">
+          <button (click)="toggleNavbarMenu($event)"
+            class="bg-slate-900 hover:bg-slate-855 text-slate-355 text-xs font-bold py-1.5 px-3.5 rounded-xl border border-slate-855 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm">
+            <!-- Menu Icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-indigo-400">
+              <line x1="4" x2="20" y1="12" y2="12" />
+              <line x1="4" x2="20" y1="6" y2="6" />
+              <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+            Menu
+            <!-- Dropdown Arrow -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+              class="text-slate-500 transition-transform duration-200" [class.rotate-180]="isNavbarMenuOpen">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+
+          <!-- Toggle Menu Dropdown list -->
+          <div *ngIf="isNavbarMenuOpen"
+            class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 z-40 animate-toast-slide-in text-left"
+            (click)="$event.stopPropagation()">
+            <!-- Room ID header inside dropdown -->
+            <div
+              class="px-3 py-2 border-b border-slate-800/80 mb-1 flex items-center justify-between text-[10px] text-slate-450 font-bold select-none">
+              <span>Room ID:</span>
+              <span class="text-xs text-indigo-400 font-black tracking-wide font-mono">{{userContext.roomId}}</span>
+            </div>
+
+            <!-- 1. Settings button inside dropdown -->
+            <button (click)="isNavbarMenuOpen = false; handleOpenSettings()"
+              class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-305 hover:text-slate-100 hover:bg-slate-850 rounded-xl transition-all cursor-pointer text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path
+                  d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              Settings
+            </button>
+
+            <!-- 2. Members button inside dropdown -->
+            <button (click)="isNavbarMenuOpen = false; isMembersListOpen = true"
+              class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-305 hover:text-slate-100 hover:bg-slate-850 rounded-xl transition-all cursor-pointer text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              Members ({{participants.length}})
+            </button>
+
+            <!-- Divider -->
+            <div class="h-px bg-slate-800/60 my-1"></div>
+
+            <!-- 3. Leave Room button inside dropdown -->
+            <button (click)="isNavbarMenuOpen = false; handleLeaveRoom()"
+              class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-rose-450 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-all cursor-pointer text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-rose-400">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" x2="9" y1="12" y2="12" />
+              </svg>
+              Leave Room
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Avatar Button in Navbar -->
+        <button (click)="handleOpenProfile()"
+          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black border cursor-pointer hover:scale-105 transition-all shadow-sm flex-shrink-0"
+          [ngClass]="[getUserTheme(userContext.color).text, getUserTheme(userContext.color).border, getUserTheme(userContext.color).bg]"
+          [title]="'Edit Profile Name (' + userContext.name + ')'">
+          {{userContext.avatar}}
         </button>
       </div>
     </header>
 
     <!-- Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      
+
       <!-- Left Workspace Area (8 columns) -->
       <div class="lg:col-span-8 space-y-6 order-2 lg:order-1">
         <!-- Task details block -->
@@ -317,7 +512,15 @@
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div class="flex items-start gap-4">
               <div class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/15 p-3 rounded-xl flex-shrink-0">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-indigo-400">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
               </div>
               <div class="flex-1 min-w-0">
                 <ng-container *ngIf="taskInfo; else noActiveTaskTemplate">
@@ -325,32 +528,26 @@
                     <span class="text-[9px] font-bold text-indigo-400 tracking-widest block uppercase">
                       ACTIVE ESTIMATING TARGET
                     </span>
-                    <span class="text-[9px] bg-slate-950 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black font-mono">
+                    <span
+                      class="text-[9px] bg-slate-950 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black font-mono">
                       {{taskInfo.id}}
                     </span>
                   </div>
 
-                  <form *ngIf="isEditingTask; else showTaskDetailsTemplate" (ngSubmit)="handleSaveTask($event)" class="mt-3 space-y-3">
-                    <input
-                      type="text"
-                      [(ngModel)]="editTitle"
-                      name="editTitle"
-                      placeholder="Ticket Title"
+                  <form *ngIf="isEditingTask; else showTaskDetailsTemplate" (ngSubmit)="handleSaveTask($event)"
+                    class="mt-3 space-y-3">
+                    <input type="text" [(ngModel)]="editTitle" name="editTitle" placeholder="Ticket Title"
                       class="w-full bg-slate-950/40 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500/60 focus:outline-none transition-all duration-300 font-bold shadow-inner"
-                      required
-                    />
-                    <textarea
-                      [(ngModel)]="editDesc"
-                      name="editDesc"
-                      placeholder="Ticket Description"
-                      rows="2.5"
-                      class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500/60 focus:outline-none transition-all duration-300 font-medium shadow-inner"
-                    ></textarea>
-                    <button
-                      type="submit"
-                      class="bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-5 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M20 6 9 17l-5-5"/></svg>
+                      required />
+                    <textarea [(ngModel)]="editDesc" name="editDesc" placeholder="Ticket Description" rows="2.5"
+                      class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500/60 focus:outline-none transition-all duration-300 font-medium shadow-inner"></textarea>
+                    <button type="submit"
+                      class="bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-5 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center gap-1.5 cursor-pointer">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-white">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
                       Update Sprint Task
                     </button>
                   </form>
@@ -369,9 +566,10 @@
                   <div class="py-2.5">
                     <span class="text-xs font-bold text-slate-400 block">No Active Estimation Target</span>
                     <span class="text-[10px] text-slate-550 leading-relaxed mt-1 block max-w-lg font-medium">
-                      {{userContext.isHost 
-                        ? 'Add a sprint ticket to the backlog queue on the right, then select it to begin player estimations.'
-                        : 'Waiting for the host to add or activate a backlog ticket to initiate poker estimations.'
+                      {{userContext.isHost
+                      ? 'Add a sprint ticket to the backlog queue on the right, then select it to begin player
+                      estimations.'
+                      : 'Waiting for the host to add or activate a backlog ticket to initiate poker estimations.'
                       }}
                     </span>
                   </div>
@@ -380,18 +578,22 @@
             </div>
 
             <div class="flex gap-2 self-start flex-shrink-0">
-              <button
-                *ngIf="userContext.isHost && taskInfo"
+              <button *ngIf="userContext.isHost && taskInfo"
                 (click)="isEditingTask = !isEditingTask; editTitle = taskInfo.title; editDesc = taskInfo.desc"
-                class="bg-slate-955 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors py-1 px-3 rounded-lg flex items-center gap-1 text-xs cursor-pointer font-bold"
-              >
+                class="bg-slate-955 border border-slate-800 text-slate-400 hover:text-slate-200 transition-colors py-1 px-3 rounded-lg flex items-center gap-1 text-xs cursor-pointer font-bold">
                 {{isEditingTask ? 'Cancel' : ''}}
                 <ng-container *ngIf="!isEditingTask">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-slate-400">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+                  </svg>
                   Edit Ticket
                 </ng-container>
               </button>
-              <span *ngIf="!userContext.isHost" class="text-[10px] bg-slate-955 text-slate-600 border border-slate-855 px-2.5 py-1 rounded-md flex items-center gap-1 font-bold">
+              <span *ngIf="!userContext.isHost"
+                class="text-[10px] bg-slate-955 text-slate-600 border border-slate-855 px-2.5 py-1 rounded-md flex items-center gap-1 font-bold">
                 Observer View
               </span>
             </div>
@@ -399,43 +601,50 @@
         </div>
 
         <!-- Poker Table Felt Surface -->
-        <div class="bg-slate-900 border border-slate-850 p-6 rounded-3xl relative flex flex-col items-center justify-between min-h-[460px] overflow-hidden select-none">
-          
+        <div
+          class="bg-slate-900 border border-slate-850 p-6 rounded-3xl relative flex flex-col items-center justify-between min-h-[460px] overflow-hidden select-none">
+
           <!-- Circular seating layout for Desktop (rendered via custom properties) -->
           <div class="w-full h-full absolute inset-0 hidden md:block pointer-events-none">
             <ng-container *ngFor="let p of participants; let idx = index">
-              <div
-                [style.left.%]="getSeatingX(idx)"
-                [style.top.%]="getSeatingY(idx)"
+              <div [style.left.%]="getSeatingX(idx)" [style.top.%]="getSeatingY(idx)"
                 [style.transform]="'translate(-50%, -50%)'"
-                class="pointer-events-auto absolute flex flex-col items-center gap-1.5 z-10"
-              >
+                class="pointer-events-auto absolute flex flex-col items-center gap-1.5 z-10">
                 <div class="relative group">
                   <div
                     class="w-12 h-12 rounded-full flex items-center justify-center text-lg font-black border-2 bg-slate-955 shadow-lg transition-transform hover:scale-105 duration-200 relative"
-                    [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border]"
-                  >
+                    [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border]">
                     {{p.avatar}}
-                    <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-sm drop-shadow" title="Session Host">👑</span>
+                    <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-sm drop-shadow"
+                      title="Session Host">👑</span>
                   </div>
-                  
-                  <span *ngIf="p.role === 'Spectator'" class="absolute -bottom-1 -right-1 bg-slate-900 border border-slate-800 text-slate-500 rounded-full p-0.5 text-[8px]" title="Observer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+
+                  <span *ngIf="p.role === 'Spectator'"
+                    class="absolute -bottom-1 -right-1 bg-slate-900 border border-slate-800 text-slate-500 rounded-full p-0.5 text-[8px]"
+                    title="Observer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="text-slate-500">
+                      <path
+                        d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
                   </span>
 
                   <div *ngIf="p.role === 'Estimator'" class="absolute -top-2 -right-12 scale-90">
-                    <span *ngIf="p.vote === null" class="bg-slate-950 border border-slate-800 text-slate-550 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider animate-pulse-ring">
+                    <span *ngIf="p.vote === null"
+                      class="bg-slate-950 border border-slate-800 text-slate-550 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider animate-pulse-ring">
                       Thinking
                     </span>
                     <div *ngIf="p.vote !== null" class="flip-card w-12 h-18" [class.flipped]="showVotes">
                       <div class="flip-card-inner">
-                        <div class="flip-card-front flex items-center justify-center font-extrabold text-[20px] shadow-md border-2 border-amber-400 rounded-lg">
+                        <div
+                          class="flip-card-front flex items-center justify-center font-extrabold text-[20px] shadow-md border-2 border-amber-400 rounded-lg">
                           <span class="text-amber-400 select-none">♠</span>
                         </div>
                         <div
                           class="flip-card-back flex items-center justify-center font-black text-base shadow-md border-2 rounded-lg"
-                          [ngClass]="[getCardStyles(p.vote).bg, getCardStyles(p.vote).borderActive, getCardStyles(p.vote).text]"
-                        >
+                          [ngClass]="[getCardStyles(p.vote).bg, getCardStyles(p.vote).borderActive, getCardStyles(p.vote).text]">
                           {{p.vote}}
                         </div>
                       </div>
@@ -443,7 +652,8 @@
                   </div>
                 </div>
 
-                <div class="text-center bg-slate-955/90 border border-slate-850 px-2 py-0.5 rounded-lg max-w-[100px] shadow-sm">
+                <div
+                  class="text-center bg-slate-955/90 border border-slate-850 px-2 py-0.5 rounded-lg max-w-[100px] shadow-sm">
                   <span class="text-[10px] font-black text-slate-200 block truncate leading-tight">
                     {{p.name}}{{p.isSelf ? ' (You)' : ''}}
                   </span>
@@ -457,33 +667,39 @@
 
           <!-- Mobile seating list -->
           <div class="w-full flex flex-wrap gap-2.5 justify-center mb-6 md:hidden pointer-events-auto">
-            <div 
-              *ngFor="let p of participants"
-              class="bg-slate-900 border border-slate-855 p-2.5 rounded-2xl flex flex-col items-center gap-1.5 shadow-sm text-center w-20 relative"
-            >
+            <div *ngFor="let p of participants"
+              class="bg-slate-900 border border-slate-855 p-2.5 rounded-2xl flex flex-col items-center gap-1.5 shadow-sm text-center w-20 relative">
               <div class="relative">
                 <div
                   class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-black border-2 bg-slate-950 shadow"
-                  [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border]"
-                >
+                  [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border]">
                   {{p.avatar}}
-                  <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-xs drop-shadow" title="Session Host">👑</span>
+                  <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-xs drop-shadow"
+                    title="Session Host">👑</span>
                 </div>
-                
+
                 <!-- Estimate Badge -->
                 <div *ngIf="p.role === 'Estimator'" class="absolute -top-2 -right-6 scale-100">
-                  <span *ngIf="p.vote === null" class="w-2.5 h-2.5 bg-indigo-500 rounded-full block animate-pulse border border-slate-950" title="Thinking"></span>
-                  <div
-                    *ngIf="p.vote !== null"
+                  <span *ngIf="p.vote === null"
+                    class="w-2.5 h-2.5 bg-indigo-500 rounded-full block animate-pulse border border-slate-950"
+                    title="Thinking"></span>
+                  <div *ngIf="p.vote !== null"
                     class="flex items-center justify-center w-7 h-9 font-black text-xs shadow border rounded-md"
-                    [ngClass]="(showVotes && p.vote) ? [getCardStyles(p.vote).bg, getCardStyles(p.vote).borderActive, getCardStyles(p.vote).text] : ['bg-emerald-500', 'border-emerald-600', 'text-white']"
-                  >
+                    [ngClass]="(showVotes && p.vote) ? [getCardStyles(p.vote).bg, getCardStyles(p.vote).borderActive, getCardStyles(p.vote).text] : ['bg-emerald-500', 'border-emerald-600', 'text-white']">
                     {{showVotes ? p.vote : '✓'}}
                   </div>
                 </div>
 
-                <span *ngIf="p.role === 'Spectator'" class="absolute -bottom-1 -right-1 bg-slate-900 border border-slate-800 text-slate-500 rounded-full p-0.5 text-[8px]" title="Observer">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-500"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+                <span *ngIf="p.role === 'Spectator'"
+                  class="absolute -bottom-1 -right-1 bg-slate-900 border border-slate-800 text-slate-500 rounded-full p-0.5 text-[8px]"
+                  title="Observer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-slate-500">
+                    <path
+                      d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
                 </span>
               </div>
 
@@ -500,49 +716,70 @@
           </div>
 
           <!-- Oval table felt in center -->
-          <div class="poker-table w-full md:w-[75%] h-auto min-h-[11rem] sm:min-h-[14rem] md:h-64 rounded-3xl md:rounded-[100px] flex flex-col items-center justify-center p-5 sm:p-6 text-center z-0 relative self-center my-auto">
-            <div class="absolute inset-0 rounded-3xl md:rounded-[100px] border border-white/5 pointer-events-none"></div>
+          <div
+            class="poker-table w-full md:w-[75%] h-auto min-h-[11rem] sm:min-h-[14rem] md:h-64 rounded-3xl md:rounded-[100px] flex flex-col items-center justify-center p-5 sm:p-6 text-center z-0 relative self-center my-auto">
+            <div class="absolute inset-0 rounded-3xl md:rounded-[100px] border border-white/5 pointer-events-none">
+            </div>
 
             <div *ngIf="!taskInfo" class="flex flex-col items-center justify-center space-y-2 z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-505 animate-bounce"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-slate-505 animate-bounce">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" x2="12.01" y1="17" y2="17" />
+              </svg>
               <h4 class="text-slate-400 text-xs font-bold uppercase">No Active Ticket</h4>
               <p class="text-[10px] text-slate-550 max-w-[200px] leading-relaxed font-semibold">
-                {{userContext.isHost 
-                  ? 'Please add a ticket to the backlog queue to start estimating.'
-                  : 'Waiting for host to configure active estimation ticket.'
+                {{userContext.isHost
+                ? 'Please add a ticket to the backlog queue to start estimating.'
+                : 'Waiting for host to configure active estimation ticket.'
                 }}
               </p>
             </div>
 
             <div *ngIf="taskInfo && !showVotes" class="flex flex-col items-center justify-center space-y-3 z-10">
-              <div class="bg-slate-950/60 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-indigo-400 font-bold shadow-md inline-flex items-center gap-1.5">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <div
+                class="bg-slate-950/60 border border-slate-800 rounded-full px-4 py-1.5 text-xs text-indigo-400 font-bold shadow-md inline-flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-indigo-400">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
                 {{ estimatorsVotedCount }} / {{ estimatorsCount }} Voted
               </div>
 
               <h4 class="text-slate-400 text-xs font-semibold max-w-xs leading-relaxed">
-                {{userRole === 'Spectator' 
-                  ? 'You are observing this estimation.'
-                  : 'Choose your card selection at the bottom of the screen.'
+                {{userRole === 'Spectator'
+                ? 'You are observing this estimation.'
+                : 'Choose your card selection at the bottom of the screen.'
                 }}
               </h4>
 
-              <button
-                *ngIf="userContext.isHost"
-                (click)="handleReveal()"
-                class="bg-emerald-600 hover:bg-emerald-505 text-white text-xs font-extrabold py-2 px-6 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1 cursor-pointer"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+              <button *ngIf="userContext.isHost" (click)="handleReveal()"
+                class="bg-emerald-600 hover:bg-emerald-505 text-white text-xs font-extrabold py-2 px-6 rounded-xl transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-white">
+                  <path
+                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
                 Reveal Cards
               </button>
 
-              <div *ngIf="!userContext.isHost" class="text-[10px] text-slate-555 bg-slate-955 border border-slate-800 px-3 py-1 rounded-md font-mono animate-pulse">
+              <div *ngIf="!userContext.isHost"
+                class="text-[10px] text-slate-555 bg-slate-955 border border-slate-800 px-3 py-1 rounded-md font-mono animate-pulse">
                 Waiting for host to reveal...
               </div>
             </div>
 
             <!-- Agreement statistics detailed panel -->
-            <div *ngIf="taskInfo && showVotes" class="flex flex-col items-center justify-center space-y-3 z-10 w-full max-w-xs md:max-w-md">
+            <div *ngIf="taskInfo && showVotes"
+              class="flex flex-col items-center justify-center space-y-3 z-10 w-full max-w-xs md:max-w-md">
               <div>
                 <h4 class="text-sm font-black" [ngClass]="agreement.color">
                   {{agreement.title}}
@@ -552,11 +789,13 @@
                 </p>
               </div>
 
-              <div class="flex flex-col md:flex-row items-center gap-3 md:gap-6 justify-center my-1 bg-slate-950/60 border border-slate-800 px-4 py-2.5 rounded-2xl shadow-inner w-full">
+              <div
+                class="flex flex-col md:flex-row items-center gap-3 md:gap-6 justify-center my-1 bg-slate-950/60 border border-slate-800 px-4 py-2.5 rounded-2xl shadow-inner w-full">
                 <!-- Stats Group -->
                 <div class="flex items-center gap-6 sm:gap-8 justify-center">
                   <div class="flex flex-col items-center">
-                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Average</span>
+                    <span
+                      class="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Average</span>
                     <span class="text-2xl font-black text-indigo-400 leading-none">
                       {{voteAverage !== null ? voteAverage : '—'}}
                     </span>
@@ -565,7 +804,8 @@
                   <div class="h-6 w-px bg-slate-850"></div>
 
                   <div class="flex flex-col items-center">
-                    <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Agreement</span>
+                    <span
+                      class="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Agreement</span>
                     <span class="text-xs font-black text-emerald-400 leading-none">
                       {{ agreementPercentage }}
                     </span>
@@ -577,35 +817,44 @@
 
                 <!-- Controls Group -->
                 <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
-                  <div class="flex bg-slate-955 border border-slate-800 text-[11px] font-bold rounded-xl px-2 py-1 items-center">
+                  <div
+                    class="flex bg-slate-955 border border-slate-800 text-[11px] font-bold rounded-xl px-2 py-1 items-center">
                     <span class="text-slate-550 mr-1.5">Consensus:</span>
-                    <select
-                      [(ngModel)]="consensusValue"
-                      class="bg-transparent text-indigo-400 border-none outline-none font-extrabold cursor-pointer"
-                    >
+                    <select [(ngModel)]="consensusValue"
+                      class="bg-transparent text-indigo-400 border-none outline-none font-extrabold cursor-pointer">
                       <option *ngFor="let val of consensusChoices" [value]="val">{{val}}</option>
                     </select>
                   </div>
-                  
+
                   <div *ngIf="userContext.isHost" class="flex items-center gap-1.5">
-                    <button
-                      (click)="handleLockEstimate(consensusValue)"
-                      class="bg-indigo-655 hover:bg-indigo-600 text-white text-[10px] font-bold py-1.5 px-3 rounded-lg transition-transform active:scale-95 flex items-center gap-1 cursor-pointer whitespace-nowrap"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 1 6 6v3.5c0 1.66-2 3.5-6 3.5s-6-1.84-6-3.5V8a6 6 0 0 1 6-6Z"/></svg>
+                    <button (click)="handleLockEstimate(consensusValue)"
+                      class="bg-indigo-655 hover:bg-indigo-600 text-white text-[10px] font-bold py-1.5 px-3 rounded-lg transition-transform active:scale-95 flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-white">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                        <path d="M4 22h16" />
+                        <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+                        <path d="M12 2a6 6 0 0 1 6 6v3.5c0 1.66-2 3.5-6 3.5s-6-1.84-6-3.5V8a6 6 0 0 1 6-6Z" />
+                      </svg>
                       Lock Score
                     </button>
 
-                    <button
-                      (click)="handleResetRound()"
-                      class="bg-slate-955 hover:bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 text-[10px] font-bold py-1.5 px-3 rounded-lg transition-transform active:scale-95 flex items-center gap-1 cursor-pointer whitespace-nowrap"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8"/><path d="M21 3v5h-5"/></svg>
+                    <button (click)="handleResetRound()"
+                      class="bg-slate-955 hover:bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 text-[10px] font-bold py-1.5 px-3 rounded-lg transition-transform active:scale-95 flex items-center gap-1 cursor-pointer whitespace-nowrap">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="text-slate-400">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8" />
+                        <path d="M21 3v5h-5" />
+                      </svg>
                       Reset
                     </button>
                   </div>
 
-                  <div *ngIf="!userContext.isHost" class="text-[10px] text-slate-555 bg-slate-955 border border-slate-800 px-3 py-1 rounded-md font-semibold">
+                  <div *ngIf="!userContext.isHost"
+                    class="text-[10px] text-slate-555 bg-slate-955 border border-slate-800 px-3 py-1 rounded-md font-semibold">
                     Estimates finalized. Waiting for host to load next task.
                   </div>
                 </div>
@@ -615,22 +864,27 @@
         </div>
 
         <!-- Download Reports section -->
-        <div *ngIf="showVotes" class="bg-slate-900 border border-slate-850 p-4.5 rounded-2xl flex flex-col md:flex-row items-center md:justify-between gap-4 shadow-sm text-center md:text-left">
+        <div *ngIf="showVotes"
+          class="bg-slate-900 border border-slate-850 p-4.5 rounded-2xl flex flex-col md:flex-row items-center md:justify-between gap-4 shadow-sm text-center md:text-left">
           <div class="flex items-center gap-2 text-xs font-semibold text-slate-200 justify-center md:justify-start">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-500 animate-pulse"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-indigo-500 animate-pulse">
+              <path
+                d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+              <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
+              <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
+            </svg>
             <span>Sprint Grooming Estimation Report ready for export</span>
           </div>
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto justify-center md:justify-end">
-            <button
-              (click)="handleDownloadJSON()"
-              class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-2 sm:py-1.5 px-3.5 rounded-xl flex items-center justify-center gap-1 cursor-pointer transition-all shadow"
-            >
+          <div
+            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto justify-center md:justify-end">
+            <button (click)="handleDownloadJSON()"
+              class="w-full sm:w-auto bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-2 sm:py-1.5 px-3.5 rounded-xl flex items-center justify-center gap-1 cursor-pointer transition-all shadow">
               Download JSON
             </button>
-            <button
-              (click)="handleDownloadCSV()"
-              class="w-full sm:w-auto bg-slate-950 hover:bg-slate-900 border border-slate-800 text-slate-305 hover:text-slate-100 text-xs font-bold py-2 sm:py-1.5 px-3.5 rounded-xl flex items-center justify-center gap-1 cursor-pointer transition-all"
-            >
+            <button (click)="handleDownloadCSV()"
+              class="w-full sm:w-auto bg-slate-950 hover:bg-slate-900 border border-slate-800 text-slate-305 hover:text-slate-100 text-xs font-bold py-2 sm:py-1.5 px-3.5 rounded-xl flex items-center justify-center gap-1 cursor-pointer transition-all">
               Download CSV
             </button>
           </div>
@@ -647,28 +901,46 @@
             </span>
           </div>
 
-          <div *ngIf="!taskInfo" class="bg-slate-955 border border-slate-855 p-4 rounded-xl text-center text-xs text-slate-600 font-bold">
+          <div *ngIf="!taskInfo"
+            class="bg-slate-955 border border-slate-855 p-4 rounded-xl text-center text-xs text-slate-600 font-bold">
             Card deck disabled. Activate or add a backlog ticket to vote.
           </div>
 
           <div *ngIf="taskInfo && userRole === 'Estimator'" class="responsive-card-grid">
-            <button
-              *ngFor="let val of deckValues"
-              (click)="handleCardSelect(val)"
-              class="h-16 sm:h-20 md:h-24 w-full rounded-xl font-extrabold text-base flex items-center justify-center transition-all cursor-pointer relative"
+            <button *ngFor="let val of deckValues" (click)="handleCardSelect(val)"
+              class="relative aspect-[2/3] w-full rounded-2xl font-black transition-all duration-300 cursor-pointer shadow-md flex flex-col justify-between p-2 select-none border-2"
               [ngClass]="selectedCard === val
-                ? 'bg-gradient-to-br from-violet-600 to-indigo-850 border-2 border-amber-400 text-white shadow-lg shadow-violet-500/30 scale-105 transform'
-                : [getCardStyles(val).bg, 'border-2', getCardStyles(val).border, getCardStyles(val).hover, getCardStyles(val).text, 'shadow-sm', 'hover:shadow-md', 'hover:-translate-y-1', 'transform']"
-            >
-              {{val}}
-              <span *ngIf="selectedCard === val" class="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-amber-400 rounded-full flex items-center justify-center">
-                <span class="w-1.5 h-1.5 rounded-full" [ngClass]="getCardStyles(val).dot"></span>
+                ? 'bg-gradient-to-br from-indigo-500 to-indigo-650 border-amber-400 text-white shadow-xl shadow-indigo-500/20 -translate-y-3 scale-105 z-10'
+                : [getCardStyles(val).bg, getCardStyles(val).border, getCardStyles(val).hover, getCardStyles(val).text, 'hover:-translate-y-2 hover:shadow-lg hover:z-10']">
+              
+              <!-- Top-left corner index -->
+              <span class="text-[9px] font-black self-start leading-none tracking-tight select-none opacity-80">{{val}}</span>
+              
+              <!-- Center large value -->
+              <span class="text-xl sm:text-2xl font-black self-center my-auto leading-none tracking-tighter select-none">
+                {{val}}
+              </span>
+              
+              <!-- Bottom-right corner index (inverted) -->
+              <span class="text-[9px] font-black self-end leading-none tracking-tight select-none rotate-180 opacity-80">{{val}}</span>
+              
+              <!-- Active golden badge inside the card -->
+              <span *ngIf="selectedCard === val"
+                class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-amber-400 rounded-full flex items-center justify-center shadow border border-white">
+                <span class="text-[10px] text-amber-950 font-black">✓</span>
               </span>
             </button>
           </div>
 
-          <div *ngIf="taskInfo && userRole !== 'Estimator'" class="bg-slate-950 border border-slate-850 p-6 rounded-xl text-center flex flex-col items-center justify-center text-slate-550 gap-1 mt-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-505"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div *ngIf="taskInfo && userRole !== 'Estimator'"
+            class="bg-slate-950 border border-slate-850 p-6 rounded-xl text-center flex flex-col items-center justify-center text-slate-550 gap-1 mt-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="text-slate-505">
+              <path
+                d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
             <span class="text-xs font-bold text-slate-450">Spectator Mode Activated</span>
             <span class="text-[10px] text-slate-600 max-w-sm font-semibold">
               Observers can see voting progress but do not select cards themselves.
@@ -681,9 +953,17 @@
       <div class="lg:col-span-4 space-y-6 order-1 lg:order-2">
         <!-- Backlog Queue widget -->
         <div class="bg-slate-900 border border-slate-850 rounded-2xl p-5 shadow-xl flex flex-col min-h-[300px]">
-          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
+          <h3
+            class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
             <span class="flex items-center gap-1.5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
               📋 Backlog Queue
             </span>
             <span class="text-[10px] bg-slate-950 border border-slate-850 text-slate-500 px-2 py-0.5 rounded font-bold">
@@ -693,63 +973,73 @@
 
           <!-- Queue List -->
           <div class="space-y-3 overflow-y-auto max-h-[350px] pr-1 mb-4 flex-1">
-            <div *ngIf="backlog.length === 0" class="h-full flex flex-col items-center justify-center text-center text-slate-550 py-10 px-2 gap-2 border border-dashed border-slate-700 rounded-xl">
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-655"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            <div *ngIf="backlog.length === 0"
+              class="h-full flex flex-col items-center justify-center text-center text-slate-550 py-10 px-2 gap-2 border border-dashed border-slate-700 rounded-xl">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-slate-655">
+                <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                <path d="M10 9H8" />
+                <path d="M16 13H8" />
+                <path d="M16 17H8" />
+              </svg>
               <span class="text-xs font-bold">Backlog starts empty</span>
               <span class="text-[10px] text-slate-650 leading-relaxed max-w-[155px] font-semibold">
-                {{userContext.isHost 
-                  ? 'Add stories below to initiate team estimation voting points.'
-                  : 'Waiting for host to add sprint tickets to backlog.'
+                {{userContext.isHost
+                ? 'Add stories below to initiate team estimation voting points.'
+                : 'Waiting for host to add sprint tickets to backlog.'
                 }}
               </span>
             </div>
 
-            <div
-              *ngFor="let ticket of backlog"
+            <div *ngFor="let ticket of backlog"
               (click)="ticket.estimate !== null ? toggleExpandTicket(ticket.id) : (userContext.isHost ? handleSelectActiveTicket(ticket) : null)"
-              class="p-3.5 rounded-xl border text-left transition-all"
-              [ngClass]="{
+              class="p-3.5 rounded-xl border text-left transition-all" [ngClass]="{
                 'bg-indigo-500/5 border-indigo-500/30 relative': taskInfo && ticket.id === taskInfo.id,
                 'bg-slate-955/40 border-slate-800': !(taskInfo && ticket.id === taskInfo.id) && ticket.estimate === null && !userContext.isHost,
                 'bg-slate-950/40 border-slate-800 opacity-85 hover:opacity-100 hover:border-slate-800 cursor-pointer': ticket.estimate !== null,
                 'bg-slate-955/40 border-slate-800 hover:border-slate-850 cursor-pointer': ticket.estimate === null && userContext.isHost
-              }"
-            >
+              }">
               <div class="flex items-start justify-between gap-1.5">
                 <div class="flex items-center gap-1.5">
-                  <span class="text-[9px] font-bold font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
+                  <span
+                    class="text-[9px] font-bold font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                     {{ticket.id}}
                   </span>
                   <span
                     *ngIf="userContext.isHost && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
                     (click)="handleSelectActiveTicket(ticket)"
                     class="text-[9px] text-indigo-400 hover:text-indigo-305 font-bold underline cursor-pointer"
-                    title="Activate estimating target"
-                  >
+                    title="Activate estimating target">
                     Activate
                   </span>
                 </div>
-                
+
                 <div class="flex items-center gap-1.5">
-                  <div
-                    *ngIf="ticket.estimate !== null"
+                  <div *ngIf="ticket.estimate !== null"
                     class="text-[9px] bg-emerald-500/10 text-emerald-450 border border-emerald-505/20 px-2 py-0.5 rounded font-black font-mono flex items-center gap-1.5"
-                    title="Estimates Locked & Immutable"
-                  >
+                    title="Estimates Locked & Immutable">
                     <span>🔒 Score: {{ticket.estimate}}</span>
                     <span class="text-[8px] opacity-70">{{expandedTicketId === ticket.id ? '▲' : '▼'}}</span>
                   </div>
-                  <span *ngIf="taskInfo && ticket.id === taskInfo.id" class="text-[8px] bg-indigo-650 text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
+                  <span *ngIf="taskInfo && ticket.id === taskInfo.id"
+                    class="text-[8px] bg-indigo-650 text-white font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider">
                     Active
                   </span>
 
-                  <button
-                    *ngIf="userContext.isHost"
-                    (click)="handleDeleteBacklogTicket($event, ticket.id)"
+                  <button *ngIf="userContext.isHost" (click)="handleDeleteBacklogTicket($event, ticket.id)"
                     class="text-slate-400 hover:text-rose-500 p-0.5 rounded transition-colors cursor-pointer"
-                    title="Delete ticket from backlog"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 hover:text-rose-500"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                    title="Delete ticket from backlog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="text-slate-400 hover:text-rose-500">
+                      <path d="M3 6h18" />
+                      <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                      <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                      <line x1="10" x2="10" y1="11" y2="17" />
+                      <line x1="14" x2="14" y1="11" y2="17" />
+                    </svg>
                   </button>
                 </div>
               </div>
@@ -761,25 +1051,29 @@
                 {{ticket.desc}}
               </p>
 
-              <div *ngIf="ticket.estimate !== null" class="flex items-center gap-2 mt-2 text-[9px] font-bold text-slate-350 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg w-max shadow-sm">
+              <div *ngIf="ticket.estimate !== null"
+                class="flex items-center gap-2 mt-2 text-[9px] font-bold text-slate-350 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded-lg w-max shadow-sm">
                 <span class="text-indigo-405">Avg: {{ticket.average || '—'}}</span>
                 <span class="h-2.5 w-px bg-slate-800"></span>
                 <span class="text-emerald-450">{{ticket.agreement || 'Estimates Locked'}}</span>
               </div>
 
               <!-- Detailed Voters History panel -->
-              <div *ngIf="ticket.estimate !== null && expandedTicketId === ticket.id && ticket.votesHistory" class="mt-3 pt-3 border-t border-slate-850 space-y-2">
+              <div *ngIf="ticket.estimate !== null && expandedTicketId === ticket.id && ticket.votesHistory"
+                class="mt-3 pt-3 border-t border-slate-850 space-y-2">
                 <div class="flex items-center justify-between text-[9px] text-slate-350 font-bold">
                   <span>Average: {{ticket.average || '—'}}</span>
                   <span>{{ticket.agreement || ''}}</span>
                 </div>
                 <div class="space-y-1.5">
-                  <div *ngFor="let voteRecord of ticket.votesHistory" class="flex items-center justify-between text-[10px] bg-slate-950/45 px-2 py-1 rounded border border-slate-800">
+                  <div *ngFor="let voteRecord of ticket.votesHistory"
+                    class="flex items-center justify-between text-[10px] bg-slate-950/45 px-2 py-1 rounded border border-slate-800">
                     <div class="flex items-center gap-1.5">
                       <span>{{voteRecord.avatar}}</span>
                       <span class="font-medium text-slate-200 truncate max-w-[80px]">{{voteRecord.name}}</span>
                     </div>
-                    <span class="font-mono font-bold text-indigo-400 bg-indigo-500/5 px-1 rounded border border-indigo-500/10">
+                    <span
+                      class="font-mono font-bold text-indigo-400 bg-indigo-500/5 px-1 rounded border border-indigo-500/10">
                       {{voteRecord.vote || '—'}}
                     </span>
                   </div>
@@ -789,57 +1083,68 @@
           </div>
 
           <!-- Host: Add ticket Form -->
-          <form *ngIf="userContext.isHost" (ngSubmit)="handleAddBacklogTicket($event)" class="border-t border-slate-700 pt-4 space-y-2">
+          <form *ngIf="userContext.isHost" (ngSubmit)="handleAddBacklogTicket($event)"
+            class="border-t border-slate-700 pt-4 space-y-2">
             <span class="text-[9px] font-black text-slate-550 uppercase tracking-widest block mb-1">
               Add Sprint Ticket
             </span>
-            <input
-              type="text"
-              placeholder="Ticket key / Title (e.g. API Gateway)"
-              [(ngModel)]="newTicketTitle"
+            <input type="text" placeholder="Ticket key / Title (e.g. API Gateway)" [(ngModel)]="newTicketTitle"
               name="newTicketTitle"
               class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none transition-all duration-300 font-bold shadow-inner"
-              required
-            />
-            <textarea
-              placeholder="Short description details..."
-              rows="2.5"
-              [(ngModel)]="newTicketDesc"
+              required />
+            <textarea placeholder="Short description details..." rows="2.5" [(ngModel)]="newTicketDesc"
               name="newTicketDesc"
-              class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-605 focus:outline-none transition-all duration-300 font-medium shadow-inner"
-            ></textarea>
-            <button
-              type="submit"
-              class="w-full bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
+              class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-605 focus:outline-none transition-all duration-300 font-medium shadow-inner"></textarea>
+            <button type="submit"
+              class="w-full bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg shadow-indigo-500/10 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-white">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 12h8" />
+                <path d="M12 8v8" />
+              </svg>
               Add Ticket
             </button>
           </form>
         </div>
 
         <!-- Sleek Discussion Timer Widget -->
-        <div *ngIf="taskInfo" class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all">
-          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
+        <div *ngIf="taskInfo"
+          class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all">
+          <h3
+            class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
             <span class="flex items-center gap-1.5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
               ⏱️ Discussion Timer
             </span>
             <span class="text-[10px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded"
-              [ngClass]="isTimerRunning ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-slate-955 text-slate-500 border border-slate-850'"
-            >
+              [ngClass]="isTimerRunning ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' : 'bg-slate-955 text-slate-500 border border-slate-850'">
               {{isTimerRunning ? 'Running' : 'Paused'}}
             </span>
           </h3>
 
           <div class="flex items-center justify-between w-full gap-4 mb-4">
             <div class="flex items-center gap-3">
-              <div class="p-2.5 rounded-xl" [ngClass]="isTimerRunning ? 'bg-indigo-500/20 text-indigo-400 animate-pulse' : 'bg-slate-950 text-slate-500'">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div class="p-2.5 rounded-xl"
+                [ngClass]="isTimerRunning ? 'bg-indigo-500/20 text-indigo-400 animate-pulse' : 'bg-slate-950 text-slate-500'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-indigo-400">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
               </div>
               <div class="flex flex-col">
-                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none mb-1">Time Remaining</span>
-                <span class="text-2xl font-black font-mono leading-none" [ngClass]="isTimerRunning ? 'text-indigo-400' : 'text-slate-355'">
+                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none mb-1">Time
+                  Remaining</span>
+                <span class="text-2xl font-black font-mono leading-none"
+                  [ngClass]="isTimerRunning ? 'text-indigo-400' : 'text-slate-355'">
                   {{ timerMinutes }}:{{ timerSecondsPadded }}
                 </span>
               </div>
@@ -847,55 +1152,56 @@
 
             <!-- Host Timer controls -->
             <div *ngIf="userContext.isHost" class="flex items-center gap-2">
-              <button
-                type="button"
-                (click)="isTimerRunning ? handleTimerPause() : handleTimerStart()"
+              <button type="button" (click)="isTimerRunning ? handleTimerPause() : handleTimerStart()"
                 class="p-2 rounded-xl text-white transition-all active:scale-90 cursor-pointer shadow-md"
                 [ngClass]="isTimerRunning ? 'bg-amber-600 hover:bg-amber-500' : 'bg-indigo-650 hover:bg-indigo-600'"
-                [title]="isTimerRunning ? 'Pause Timer' : 'Start Timer'"
-              >
-                <svg *ngIf="isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>
-                <svg *ngIf="!isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                [title]="isTimerRunning ? 'Pause Timer' : 'Start Timer'">
+                <svg *ngIf="isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" class="text-white">
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                </svg>
+                <svg *ngIf="!isTimerRunning" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" class="text-white">
+                  <polygon points="6 3 20 12 6 21 6 3" />
+                </svg>
               </button>
-              
-              <button
-                type="button"
-                (click)="handleTimerReset()"
+
+              <button type="button" (click)="handleTimerReset()"
                 class="p-2 rounded-xl bg-slate-950 hover:bg-slate-900 text-slate-400 hover:text-slate-202 border border-slate-850 transition-all active:scale-90 cursor-pointer"
-                title="Reset Timer"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8"/><path d="M21 3v5h-5"/></svg>
+                title="Reset Timer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-slate-400">
+                  <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L21 8" />
+                  <path d="M21 3v5h-5" />
+                </svg>
               </button>
             </div>
           </div>
 
           <!-- Presets for Host -->
-          <div *ngIf="userContext.isHost" class="flex items-center gap-2 pt-3.5 border-t border-slate-850 w-full justify-between">
+          <div *ngIf="userContext.isHost"
+            class="flex items-center gap-2 pt-3.5 border-t border-slate-850 w-full justify-between">
             <span class="text-[10px] font-bold text-slate-500 font-semibold">Presets:</span>
             <div class="flex gap-1.5">
-              <button
-                *ngFor="let sec of [30, 60, 90, 120]"
-                type="button"
+              <button *ngFor="let sec of [30, 60, 90, 120]" type="button"
                 (click)="customTimerInput = sec.toString(); timerSeconds = sec; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: sec })"
                 class="text-[10px] font-bold px-2 py-1 rounded-lg transition-all active:scale-95 cursor-pointer border"
                 [ngClass]="(timerSeconds === sec && !isTimerRunning) 
                   ? 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30' 
-                  : 'bg-slate-955 hover:bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-850'"
-              >
+                  : 'bg-slate-955 hover:bg-slate-900 text-slate-400 hover:text-slate-200 border-slate-850'">
                 {{sec}}s
               </button>
             </div>
-            
+
             <div class="flex items-center bg-slate-955 border border-slate-850 rounded-lg px-2 py-1 max-w-[60px]">
-              <input
-                type="number"
-                min="10"
-                max="600"
-                [(ngModel)]="customTimerInput"
+              <input type="number" min="10" max="600" [(ngModel)]="customTimerInput"
                 (ngModelChange)="timerSeconds = $event; isTimerRunning = false; socket.emit('timer-control', { isRunning: false, seconds: $event })"
                 class="w-full bg-transparent border-none text-[10px] text-indigo-400 font-bold focus:outline-none text-center"
-                title="Custom seconds"
-              />
+                title="Custom seconds" />
             </div>
           </div>
         </div>
@@ -904,53 +1210,50 @@
   </div>
 
   <!-- Settings Modal overlay -->
-  <div *ngIf="isSettingsOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+  <div *ngIf="isSettingsOpen"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
     <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left">
       <h3 class="text-base font-black text-slate-100 flex items-center justify-between mb-4">
         <span class="flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-indigo-400">
+            <path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
           Room & Profile Settings
         </span>
-        <span class="text-xs font-mono text-slate-404 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800 flex items-center gap-1.5 font-bold">
+        <span
+          class="text-xs font-mono text-slate-404 bg-slate-950 px-2.5 py-0.5 rounded border border-slate-800 flex items-center gap-1.5 font-bold">
           <span>Room:</span>
           <span class="text-indigo-400 font-black">{{userContext.roomId}}</span>
         </span>
       </h3>
-      
-      <form
-        (ngSubmit)="
+
+      <form (ngSubmit)="
           isSettingsOpen = false;
           (userContext.isHost && settingsTitle.trim() ? handleSaveSettingsTask(settingsTitle, settingsDesc) : null);
           (settingsRole !== userContext.role ? handleUpdateRole(settingsRole) : null);
           (userContext.isHost && settingsDeck !== deckType ? handleDeckChange(settingsDeck) : null);
           addToast('Settings applied successfully!', 'success')
-        "
-        class="space-y-4"
-      >
-        
+        " class="space-y-4">
+
         <!-- Profile Settings (All players) -->
         <div class="space-y-1.5 border-b border-slate-800 pb-4">
           <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">My Profile</span>
           <label class="text-xs text-slate-400 font-semibold block">Your Seating Role</label>
           <div class="grid grid-cols-2 gap-2.5">
-            <button
-              type="button"
-              (click)="settingsRole = 'Estimator'"
-              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold"
-              [ngClass]="settingsRole === 'Estimator' 
+            <button type="button" (click)="settingsRole = 'Estimator'"
+              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Estimator' 
                 ? 'border-indigo-500 bg-indigo-500/10 text-indigo-300' 
-                : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'"
-            >
+                : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'">
               Estimator (Vote)
             </button>
-            <button
-              type="button"
-              (click)="settingsRole = 'Spectator'"
-              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold"
-              [ngClass]="settingsRole === 'Spectator' 
+            <button type="button" (click)="settingsRole = 'Spectator'"
+              class="p-2 rounded-xl border text-xs font-bold transition-all cursor-pointer font-bold" [ngClass]="settingsRole === 'Spectator' 
                 ? 'border-indigo-500 bg-indigo-500/10 text-indigo-300' 
-                : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'"
-            >
+                : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'">
               Spectator (Observe)
             </button>
           </div>
@@ -960,7 +1263,8 @@
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-bold text-indigo-400 tracking-wider block uppercase">Host Controls</span>
-            <span *ngIf="!userContext.isHost" class="text-[9px] bg-slate-950/60 text-slate-500 border border-slate-850 px-1.5 py-0.5 rounded font-bold">
+            <span *ngIf="!userContext.isHost"
+              class="text-[9px] bg-slate-950/60 text-slate-500 border border-slate-850 px-1.5 py-0.5 rounded font-bold">
               ReadOnly (Host Only)
             </span>
           </div>
@@ -968,12 +1272,8 @@
           <!-- Deck Mode Selection -->
           <div class="space-y-1.5">
             <label class="text-xs text-slate-400 font-semibold block">Deck Size/Type</label>
-            <select
-              [disabled]="!userContext.isHost"
-              [(ngModel)]="settingsDeck"
-              name="settingsDeck"
-              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-202 focus:outline-none focus:border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-            >
+            <select [disabled]="!userContext.isHost" [(ngModel)]="settingsDeck" name="settingsDeck"
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-202 focus:outline-none focus:border-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed font-medium">
               <option value="Fibonacci">Fibonacci</option>
               <option value="TShirt">T-Shirt Sizing</option>
               <option value="Sequential">Sequential (1-10)</option>
@@ -984,43 +1284,64 @@
           <div class="space-y-3">
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-semibold block">Ticket Title</label>
-              <input
-                [disabled]="!userContext.isHost"
-                type="text"
-                [(ngModel)]="settingsTitle"
-                name="settingsTitle"
+              <input [disabled]="!userContext.isHost" type="text" [(ngModel)]="settingsTitle" name="settingsTitle"
                 placeholder="Enter ticket title..."
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-inner"
-              />
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-bold shadow-inner" />
             </div>
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-semibold block">Ticket Description</label>
-              <textarea
-                [disabled]="!userContext.isHost"
-                rows="2.5"
-                [(ngModel)]="settingsDesc"
-                name="settingsDesc"
+              <textarea [disabled]="!userContext.isHost" rows="2.5" [(ngModel)]="settingsDesc" name="settingsDesc"
                 placeholder="Enter ticket details..."
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-medium shadow-inner"
-              ></textarea>
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-medium shadow-inner"></textarea>
             </div>
           </div>
         </div>
 
         <!-- Actions -->
         <div class="flex gap-2 pt-4">
-          <button
-            type="button"
-            (click)="isSettingsOpen = false"
-            class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center font-bold"
-          >
+          <button type="button" (click)="isSettingsOpen = false"
+            class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center font-bold">
             Cancel
           </button>
-          <button
-            type="submit"
-            class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold"
-          >
+          <button type="submit"
+            class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
             Apply Settings
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal overlay -->
+  <div *ngIf="isProfileOpen" (click)="isProfileOpen = false"
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-955/80 backdrop-blur-md">
+    <div (click)="$event.stopPropagation()"
+      class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left animate-toast-slide-in">
+      <h3 class="text-base font-black text-slate-100 flex items-center gap-2 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        Edit Profile
+      </h3>
+
+      <form (ngSubmit)="handleSaveProfile()" class="space-y-4">
+        <div class="space-y-1.5">
+          <label class="text-xs text-slate-400 font-semibold block">Display Name</label>
+          <input type="text" [(ngModel)]="profileName" name="profileName" placeholder="Enter your name..."
+            class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-202 focus:outline-none transition-all duration-300 font-bold shadow-inner"
+            required />
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button type="button" (click)="isProfileOpen = false"
+            class="flex-1 bg-slate-950 hover:bg-slate-850 text-slate-400 hover:text-slate-250 border border-slate-800 rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center font-bold">
+            Cancel
+          </button>
+          <button type="submit"
+            class="flex-1 bg-indigo-650 hover:bg-indigo-600 text-white rounded-xl py-2.5 text-xs font-bold transition-all cursor-pointer text-center shadow font-bold">
+            Save Name
           </button>
         </div>
       </form>
@@ -1040,17 +1361,33 @@
   </footer>
 
   <!-- Toast Notification Container -->
-  <div class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9999] space-y-2 pointer-events-none max-w-md sm:max-w-sm w-auto sm:w-full">
-    <div
-      *ngFor="let t of toasts"
-      (click)="removeToast(t.id)"
+  <div
+    class="fixed bottom-4 right-4 left-4 sm:left-auto sm:right-6 sm:bottom-6 z-[9999] space-y-2 pointer-events-none max-w-md sm:max-w-sm w-auto sm:w-full">
+    <div *ngFor="let t of toasts" (click)="removeToast(t.id)"
       class="p-4 rounded-2xl border shadow-xl flex items-center gap-3 transition-all duration-300 animate-toast-slide-in pointer-events-auto bg-slate-900 border-slate-800 cursor-pointer hover:border-slate-700/80 active:scale-[0.98] select-none"
-      title="Click to dismiss"
-    >
+      title="Click to dismiss">
       <div class="flex-shrink-0">
-        <svg *ngIf="t.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-500"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <svg *ngIf="t.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-        <svg *ngIf="t.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-500 animate-pulse"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z"/></svg>
+        <svg *ngIf="t.type === 'success'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="text-emerald-500">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <svg *ngIf="t.type === 'error'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="text-rose-500">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+        <svg *ngIf="t.type === 'info'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="text-indigo-500 animate-pulse">
+          <path
+            d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275Z" />
+          <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5Z" />
+          <path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1Z" />
+        </svg>
       </div>
       <div class="flex-1">
         <p class="text-xs font-bold text-slate-200 leading-snug">{{t.message}}</p>

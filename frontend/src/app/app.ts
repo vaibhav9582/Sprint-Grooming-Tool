@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, NgZone, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -56,6 +56,10 @@ export class App implements OnInit, OnDestroy {
 
   // Settings states
   isSettingsOpen = false;
+  isMembersListOpen = false;
+  isNavbarMenuOpen = false;
+  isProfileOpen = false;
+  profileName = '';
   settingsTitle = '';
   settingsDesc = '';
   settingsRole = 'Estimator';
@@ -256,6 +260,22 @@ export class App implements OnInit, OnDestroy {
   toggleTheme() {
     this.theme = this.theme === 'dark' ? 'light' : 'dark';
     this.applyTheme();
+  }
+
+  toggleMembersList(event: Event) {
+    event.stopPropagation();
+    this.isMembersListOpen = !this.isMembersListOpen;
+  }
+
+  toggleNavbarMenu(event: Event) {
+    event.stopPropagation();
+    this.isNavbarMenuOpen = !this.isNavbarMenuOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    this.isMembersListOpen = false;
+    this.isNavbarMenuOpen = false;
   }
 
   addToast(message: string, type = 'info') {
@@ -469,7 +489,6 @@ export class App implements OnInit, OnDestroy {
 
     if (this.socket) {
       this.socket.emit('cast-vote', { vote: val });
-      this.addToast(`Vote cast: ${val}`, 'success');
     }
   }
 
@@ -747,6 +766,43 @@ export class App implements OnInit, OnDestroy {
     this.settingsRole = this.userContext.role;
     this.settingsDeck = this.deckType;
     this.isSettingsOpen = true;
+  }
+
+  handleOpenProfile() {
+    this.profileName = this.userContext.name;
+    this.isProfileOpen = true;
+  }
+
+  handleSaveProfile() {
+    if (!this.profileName.trim()) {
+      this.addToast("Display name cannot be empty!", "error");
+      return;
+    }
+
+    const newName = this.profileName.trim();
+    const newAvatar = newName.charAt(0).toUpperCase();
+
+    const updatedContext = {
+      ...this.userContext,
+      name: newName,
+      avatar: newAvatar
+    };
+
+    this.userContext = updatedContext;
+    sessionStorage.setItem('sprint_grooming_user_context', JSON.stringify(updatedContext));
+
+    if (this.socket) {
+      this.socket.emit('join-room', {
+        roomId: this.userContext.roomId,
+        user: {
+          ...updatedContext,
+          vote: this.userContext.role === 'Spectator' ? null : this.selectedCard
+        }
+      });
+    }
+
+    this.isProfileOpen = false;
+    this.addToast("Display name updated successfully!", "success");
   }
 
   handleDownloadJSON() {
