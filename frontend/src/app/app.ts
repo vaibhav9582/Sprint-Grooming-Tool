@@ -60,7 +60,7 @@ export class App implements OnInit, OnDestroy {
   jiraEmail = '';
   jiraToken = '';
   jiraSprintId = '';
-  isJiraDemo = true;
+  isJiraDemo = false;
   isJiraConnected = false;
   jiraIssues: any[] = [];
   selectedJiraIssueIds: string[] = [];
@@ -240,6 +240,7 @@ export class App implements OnInit, OnDestroy {
       this.userContext = JSON.parse(saved);
       this.deckType = this.userContext.deckType || 'Fibonacci';
       this.currentScreen = 'board';
+      this.jiraTab = 'manual';
       this.connectSocket();
     }
 
@@ -348,17 +349,17 @@ export class App implements OnInit, OnDestroy {
       this.socket.on('sync-state', (state: any) => {
         this.ngZone.run(() => {
           if (state.showVotes && !this.showVotes) {
-            this.addToast("Estimation cards revealed!", "info");
+            this.addToast("Discussion timer revealed!", "info");
           }
-
+ 
           this.taskInfo = state.taskInfo;
           this.backlog = state.backlog || [];
           this.showVotes = state.showVotes;
-
+ 
           if (state.deckType) {
             this.deckType = state.deckType;
           }
-
+ 
           const mappedParticipants = state.participants.map((p: any) => {
             if (p.id === this.userContext.id) {
               if (p.isHost !== this.userContext.isHost) {
@@ -369,34 +370,36 @@ export class App implements OnInit, OnDestroy {
             }
             return { ...p, isSelf: false };
           });
-
+ 
           this.participants = mappedParticipants;
-
+ 
           if (!state.showVotes && state.participants.find((p: any) => p.id === this.userContext.id)?.vote === null) {
             this.selectedCard = null;
           }
-
+ 
           this.updateConsensusValue();
-
+ 
           // Canvas confetti check
-          if (this.isConsensusReached) {
+          if (this.showVotes) {
             this.startConfetti();
           } else {
             this.stopConfetti();
           }
+          this.cdr.detectChanges();
         });
       });
-
+ 
       this.socket.on('timer-update', (data: any) => {
         this.ngZone.run(() => {
           const isRunning = data.isRunning;
           const seconds = data.seconds;
-
+ 
           if (isRunning && !this.isTimerRunning) {
-            this.addToast("Discussion timer started!", "info");
+            this.addToast("Discussion timer started! Cards will be automatically revealed on timeout.", "info");
           }
           this.isTimerRunning = isRunning;
           this.timerSeconds = seconds;
+          this.cdr.detectChanges();
         });
       });
     });
@@ -487,6 +490,7 @@ export class App implements OnInit, OnDestroy {
 
     sessionStorage.setItem('sprint_grooming_user_context', JSON.stringify(this.userContext));
     this.currentScreen = 'board';
+    this.jiraTab = 'manual';
     this.connectSocket();
 
     if (isHost) {
