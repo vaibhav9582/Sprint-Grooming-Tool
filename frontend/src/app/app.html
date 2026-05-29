@@ -279,11 +279,11 @@
 
     <!-- Header -->
     <header
-      class="flex flex-col lg:flex-row justify-between items-start lg:items-center border-b border-slate-800 pb-4 gap-4 w-full">
+      class="flex justify-between items-center border-b border-slate-800 pb-4 gap-4 w-full">
       <div class="flex items-center gap-3">
         <span class="text-xl font-black flex items-center gap-2">
           <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-6 md:h-7 w-auto object-contain" />
-          <span class="bg-gradient-to-r from-indigo-500 to-indigo-650 bg-clip-text text-transparent tracking-wide">
+          <span class="bg-gradient-to-r from-indigo-500 to-indigo-650 bg-clip-text text-transparent tracking-wide hidden sm:inline-block">
             Sprint Grooming Tool
           </span>
         </span>
@@ -294,7 +294,7 @@
         </span>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+      <div class="flex items-center gap-2.5">
         <!-- Theme Toggle -->
         <button (click)="toggleTheme()"
           class="bg-slate-900 hover:bg-slate-855 text-slate-355 text-xs font-bold p-2 rounded-xl border border-slate-855 transition-all flex items-center justify-center cursor-pointer shadow-sm"
@@ -402,10 +402,9 @@
             </div>
           </div>
         </div>
-
-        <!-- Invite Member (Primary action button) -->
+               <!-- Invite Member (Primary action button - hidden on small devices) -->
         <button (click)="handleCopyInviteLink()"
-          class="bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-bold py-1.5 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow">
+          class="hidden lg:flex bg-indigo-500 hover:bg-indigo-650 text-white text-xs font-bold py-1.5 px-3.5 rounded-xl transition-all flex items-center gap-1.5 cursor-pointer shadow">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
             <path d="M9 17H7A5 5 0 0 1 7 7h2" />
@@ -438,13 +437,13 @@
 
           <!-- Toggle Menu Dropdown list -->
           <div *ngIf="isNavbarMenuOpen"
-            class="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 z-40 animate-toast-slide-in text-left"
+            class="absolute right-0 mt-2 w-52 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-2 z-45 animate-toast-slide-in text-left"
             (click)="$event.stopPropagation()">
             <!-- Room ID header inside dropdown -->
             <div
               class="px-3 py-2 border-b border-slate-800/80 mb-1 flex items-center justify-between text-[10px] text-slate-450 font-bold select-none">
               <span>Room ID:</span>
-              <span class="text-xs text-indigo-400 font-black tracking-wide font-mono">{{userContext.roomId}}</span>
+              <span class="text-xs text-indigo-450 font-black tracking-wide font-mono">{{userContext.roomId}}</span>
             </div>
 
             <!-- 1. Settings button inside dropdown -->
@@ -474,6 +473,31 @@
               Members ({{participants.length}})
             </button>
 
+            <!-- Mobile-only: Invite Member -->
+            <button (click)="isNavbarMenuOpen = false; handleCopyInviteLink()"
+              class="flex lg:hidden w-full items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-305 hover:text-slate-100 hover:bg-slate-850 rounded-xl transition-all cursor-pointer text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M9 17H7A5 5 0 0 1 7 7h2" />
+                <path d="M15 7h2a5 5 0 0 1 0 10h-2" />
+                <line x1="8" x2="16" y1="12" y2="12" />
+              </svg>
+              {{copiedLink ? 'Link Copied!' : 'Invite Member'}}
+            </button>
+
+            <!-- Mobile-only: Edit Profile -->
+            <button (click)="isNavbarMenuOpen = false; handleOpenProfile()"
+              class="flex lg:hidden w-full items-center gap-2.5 px-3 py-2 text-xs font-bold text-slate-305 hover:text-slate-100 hover:bg-slate-850 rounded-xl transition-all cursor-pointer text-left">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Profile Settings
+            </button>
+
             <!-- Divider -->
             <div class="h-px bg-slate-800/60 my-1"></div>
 
@@ -492,9 +516,9 @@
           </div>
         </div>
 
-        <!-- Profile Avatar Button in Navbar -->
+        <!-- Profile Avatar Button in Navbar - hidden on small devices -->
         <button (click)="handleOpenProfile()"
-          class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-black border cursor-pointer hover:scale-105 transition-all shadow-sm flex-shrink-0"
+          class="hidden lg:flex w-8 h-8 rounded-full flex items-center justify-center text-xs font-black border cursor-pointer hover:scale-105 transition-all shadow-sm flex-shrink-0"
           [ngClass]="[getUserTheme(userContext.color).text, getUserTheme(userContext.color).border, getUserTheme(userContext.color).bg]"
           [title]="'Edit Profile Name (' + userContext.name + ')'">
           {{userContext.avatar}}
