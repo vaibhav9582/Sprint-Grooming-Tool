@@ -139,6 +139,10 @@ export class App implements OnInit, OnDestroy {
     return colors[code % colors.length];
   }
 
+  get scrumMaster(): any {
+    return this.participants.find(p => p.isHost);
+  }
+
   get userRole(): string {
     return this.userContext.role || 'Estimator';
   }
