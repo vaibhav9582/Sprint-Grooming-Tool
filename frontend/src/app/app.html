@@ -623,8 +623,26 @@
         <div
           class="bg-slate-900 border border-slate-850 p-6 rounded-3xl relative flex flex-col items-center justify-between min-h-[460px] overflow-hidden select-none">
 
+          <!-- Voting Area Header info -->
+          <div class="w-full flex justify-between items-center z-10 mb-4 pb-2.5 border-b border-slate-800/60 flex-shrink-0">
+            <span class="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2v20" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+              Voting Board
+            </span>
+            <span *ngIf="scrumMaster"
+              class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
+              👑 Scrum Master: {{scrumMaster.name}}
+            </span>
+          </div>
+
           <!-- Circular seating layout for Desktop (rendered via custom properties) -->
-          <div class="w-full h-full absolute inset-0 hidden md:block pointer-events-none">
+          <div class="w-full absolute inset-x-0 top-12 bottom-0 hidden md:block pointer-events-none">
             <ng-container *ngFor="let p of participants; let idx = index">
               <div [style.left.%]="getSeatingX(idx)" [style.top.%]="getSeatingY(idx)"
                 [style.transform]="'translate(-50%, -50%)'"
@@ -917,10 +935,6 @@
               <h3 class="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
                 Select Your Estimate
               </h3>
-              <span *ngIf="scrumMaster"
-                class="inline-flex items-center gap-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
-                👑 SM: {{scrumMaster.name}}
-              </span>
             </div>
             <span *ngIf="userRole === 'Estimator' && selectedCard" class="text-xs text-slate-500 font-semibold">
               Your Selection: <strong class="text-violet-405 font-black">{{selectedCard}}</strong>
@@ -1310,9 +1324,12 @@
             </div>
           </div>
 
+          <!-- Divider between Backlog and Timer -->
+          <div *ngIf="taskInfo" class="border-t border-slate-700 my-6"></div>
+
           <!-- Sleek Discussion Timer Widget -->
           <div *ngIf="taskInfo"
-            class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all mt-6">
+            class="bg-slate-900 border border-slate-850 p-5 rounded-2xl shadow-xl flex flex-col transition-all">
             <h3
               class="text-xs font-bold uppercase tracking-widest text-slate-400 border-b border-slate-850 pb-3.5 mb-4 flex items-center justify-between">
               <span class="flex items-center gap-1.5">
@@ -1382,6 +1399,9 @@
                 </button>
               </div>
             </div>
+
+            <!-- Divider -->
+            <div class="border-t border-slate-700 my-4"></div>
 
             <!-- Auto-Reveal Note -->
             <div

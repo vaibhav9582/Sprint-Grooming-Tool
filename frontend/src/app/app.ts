@@ -232,20 +232,39 @@ export class App implements OnInit, OnDestroy {
     const joinIdx = pathParts.indexOf('join');
     const hasJoinParam = (joinIdx !== -1 && pathParts[joinIdx + 1]) || roomParam;
 
-    if (hasJoinParam) {
+    // Attempt restoring session context
+    const saved = sessionStorage.getItem('sprint_grooming_user_context');
+    if (saved) {
+      try {
+        const parsedContext = JSON.parse(saved);
+        const targetRoom = roomParam || (joinIdx !== -1 ? decodeURIComponent(pathParts[joinIdx + 1]) : null);
+        
+        // If there is no specific target room in the URL, or if it matches our active session room, restore session
+        if (!targetRoom || targetRoom === parsedContext.roomId) {
+          this.userContext = parsedContext;
+          this.name = this.userContext.name || '';
+          this.roomIdInput = this.userContext.roomId || '';
+          this.deckType = this.userContext.deckType || 'Fibonacci';
+          this.currentScreen = 'board';
+          this.jiraTab = 'manual';
+          this.connectSocket();
+        } else {
+          // A different room link was clicked, show lobby to join the new room
+          this.roomIdInput = targetRoom;
+          this.inviteRoomFound = true;
+          this.lobbyTab = 'join';
+        }
+      } catch (e) {
+        if (hasJoinParam) {
+          this.roomIdInput = roomParam || decodeURIComponent(pathParts[joinIdx + 1]);
+          this.inviteRoomFound = true;
+          this.lobbyTab = 'join';
+        }
+      }
+    } else if (hasJoinParam) {
       this.roomIdInput = roomParam || decodeURIComponent(pathParts[joinIdx + 1]);
       this.inviteRoomFound = true;
       this.lobbyTab = 'join';
-    }
-
-    // Attempt restoring session context
-    const saved = sessionStorage.getItem('sprint_grooming_user_context');
-    if (saved && !hasJoinParam) {
-      this.userContext = JSON.parse(saved);
-      this.deckType = this.userContext.deckType || 'Fibonacci';
-      this.currentScreen = 'board';
-      this.jiraTab = 'manual';
-      this.connectSocket();
     }
 
     // Set unique session user ID
@@ -373,6 +392,16 @@ export class App implements OnInit, OnDestroy {
               return { ...p, isSelf: true };
             }
             return { ...p, isSelf: false };
+          });
+
+          // Sort participants to ensure the Scrum Master (host) is always at the very top (index 0)
+          // followed by isSelf (You) if not host, then sorted alphabetically by name
+          mappedParticipants.sort((a: any, b: any) => {
+            if (a.isHost && !b.isHost) return -1;
+            if (!a.isHost && b.isHost) return 1;
+            if (a.isSelf && !b.isSelf) return -1;
+            if (!a.isSelf && b.isSelf) return 1;
+            return a.name.localeCompare(b.name);
           });
  
           this.participants = mappedParticipants;
