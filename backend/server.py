@@ -143,21 +143,6 @@ async def cleanup_room_delayed(room_id: str):
     except asyncio.CancelledError:
         pass
 
-# Delayed async task to transfer host when original host disconnects
-async def host_transfer_delayed(room_id: str):
-    try:
-        await asyncio.sleep(5)  # 5 seconds grace period
-        if room_id in rooms:
-            room = rooms[room_id]
-            has_host = any(p.get('isHost') for p in room['participants'])
-            if len(room['participants']) > 0 and not has_host:
-                # Assign host status to first participant
-                room['participants'][0]['isHost'] = True
-                room['hostUserId'] = room['participants'][0]['id']
-                await sio.emit('sync-state', room, room=room_id)
-                print(f"Room {room_id} host transferred to {room['participants'][0]['name']}.")
-    except asyncio.CancelledError:
-        pass
 
 @sio.event
 async def connect(sid, environ):
@@ -378,11 +363,9 @@ async def disconnect(sid):
             room_timeouts[room_id]['cleanupTimeout'] = asyncio.create_task(cleanup_room_delayed(room_id))
             print(f"Room {room_id} is empty. Scheduled cleanup in 15 seconds.")
         else:
-            # If host left, wait 5 seconds to transfer host status
+            # If host left, do not transfer host status
             if was_host:
-                cancel_timeout(room_id, 'hostTransferTimeout')
-                room_timeouts[room_id]['hostTransferTimeout'] = asyncio.create_task(host_transfer_delayed(room_id))
-                print(f"Host left room {room_id}. Scheduled host transfer in 5 seconds.")
+                print(f"Host left room {room_id}. Host status will not be transferred.")
             
             # Sync new state and announce departure to active members
             await sio.emit('sync-state', room, room=room_id)
