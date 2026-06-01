@@ -911,6 +911,145 @@ export class App implements OnInit, OnDestroy {
     this.addToast("CSV report downloaded successfully!", "success");
   }
 
+  get hasCompletedTickets(): boolean {
+    return this.backlog.some(item => item.status === 'completed');
+  }
+
+  get completedTicketsCount(): number {
+    return this.backlog.filter(item => item.status === 'completed').length;
+  }
+
+  handleDownloadSingleJSON(ticket: any) {
+    const reportData = {
+      room: this.userContext.roomId,
+      sessionName: this.userContext.sessionName,
+      ticketId: ticket.id,
+      ticketTitle: ticket.title,
+      ticketDesc: ticket.desc,
+      timestamp: new Date().toISOString(),
+      average: ticket.average,
+      agreement: ticket.agreement,
+      estimate: ticket.estimate,
+      voters: (ticket.votesHistory || []).map((p: any) => ({
+        name: p.name,
+        role: 'Estimator',
+        vote: p.vote || 'No Vote'
+      }))
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `EXL_Grooming_Report_${ticket.id}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    this.addToast(`JSON report for ${ticket.id} downloaded successfully!`, "success");
+  }
+
+  handleDownloadSingleCSV(ticket: any) {
+    const headers = ["Session Room", "Ticket ID", "Ticket Title", "Average Score", "Consensus Status", "Locked Estimate", "Voter Name", "Vote"];
+    const rows = (ticket.votesHistory || []).map((p: any) => [
+      this.userContext.roomId || '',
+      ticket.id || '',
+      ticket.title || '',
+      ticket.average || '',
+      ticket.agreement || '',
+      ticket.estimate || '',
+      p.name,
+      p.vote || 'No Vote'
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8,"
+      + [headers.join(","), ...rows.map((e: any[]) => e.map((val: any) => `"${String(val).replace(/"/g, '""')}"`).join(","))].join("\n");
+
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", encodeURI(csvContent));
+    downloadAnchor.setAttribute("download", `EXL_Grooming_Report_${ticket.id}.csv`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    this.addToast(`CSV report for ${ticket.id} downloaded successfully!`, "success");
+  }
+
+  handleDownloadAllJSON() {
+    const completed = this.backlog.filter(item => item.status === 'completed');
+    const reportData = {
+      room: this.userContext.roomId,
+      sessionName: this.userContext.sessionName,
+      timestamp: new Date().toISOString(),
+      completedTicketsCount: completed.length,
+      tickets: completed.map(ticket => ({
+        ticketId: ticket.id,
+        ticketTitle: ticket.title,
+        ticketDesc: ticket.desc,
+        average: ticket.average,
+        agreement: ticket.agreement,
+        estimate: ticket.estimate,
+        voters: (ticket.votesHistory || []).map((p: any) => ({
+          name: p.name,
+          vote: p.vote || 'No Vote'
+        }))
+      }))
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(reportData, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `EXL_Session_Grooming_Report_${this.userContext.roomId || 'room'}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    this.addToast("Consolidated JSON report downloaded successfully!", "success");
+  }
+
+  handleDownloadAllCSV() {
+    const completed = this.backlog.filter(item => item.status === 'completed');
+    const headers = ["Session Room", "Ticket ID", "Ticket Title", "Ticket Description", "Locked Estimate", "Average Score", "Consensus Status", "Voter Name", "Vote"];
+    
+    const rows: any[] = [];
+    completed.forEach(ticket => {
+      if (!ticket.votesHistory || ticket.votesHistory.length === 0) {
+        rows.push([
+          this.userContext.roomId || '',
+          ticket.id || '',
+          ticket.title || '',
+          ticket.desc || '',
+          ticket.estimate || '',
+          ticket.average || '',
+          ticket.agreement || '',
+          'N/A',
+          'N/A'
+        ]);
+      } else {
+        ticket.votesHistory.forEach((p: any) => {
+          rows.push([
+            this.userContext.roomId || '',
+            ticket.id || '',
+            ticket.title || '',
+            ticket.desc || '',
+            ticket.estimate || '',
+            ticket.average || '',
+            ticket.agreement || '',
+            p.name,
+            p.vote || 'No Vote'
+          ]);
+        });
+      }
+    });
+
+    const csvContent = "data:text/csv;charset=utf-8,"
+      + [headers.join(","), ...rows.map((e: any[]) => e.map((val: any) => `"${String(val).replace(/"/g, '""')}"`).join(","))].join("\n");
+
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", encodeURI(csvContent));
+    downloadAnchor.setAttribute("download", `EXL_Session_Grooming_Report_${this.userContext.roomId || 'room'}.csv`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+    this.addToast("Consolidated CSV report downloaded successfully!", "success");
+  }
+
   handleCopyRoomId() {
     navigator.clipboard.writeText(this.userContext.roomId);
     this.copied = true;
