@@ -128,8 +128,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="text-xs font-bold text-slate-200">Estimation Decks</h4>
-              <p class="text-[10px] text-slate-550 mt-0.5">Support for Fibonacci, T-Shirt.</p>
+              <h4 class="text-xs font-bold text-slate-200">Estimation Techniques</h4>
+              <p class="text-[10px] text-slate-550 mt-0.5">Support for Fibonacci and T-Shirt sizing Estimation Techniques.</p>
             </div>
           </div>
 
@@ -205,7 +205,7 @@
             </div>
 
             <div class="space-y-1.5">
-              <label class="text-xs text-slate-400 font-bold block">Estimation Technique</label>
+              <label class="text-xs text-slate-400 font-bold block">Estimation Techniques</label>
               <select [(ngModel)]="deckType"
                 class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
                 <option value="Fibonacci">Fibonacci</option>
@@ -269,10 +269,10 @@
 
   <!-- ESTIMATION BOARD SCREEN -->
   <div *ngIf="currentScreen === 'board'"
-    class="flex-1 max-w-[1500px] w-full mx-auto p-4 md:p-2 lg:p-4 flex flex-col gap-6 relative">
+    class="flex-1 max-w-[1500px] w-full mx-auto p-4 md:p-2 lg:p-4 flex flex-col gap-2 relative">
 
     <!-- Header -->
-    <header class="flex justify-between items-center border-b border-slate-800 pb-4 gap-4 w-full">
+    <header class="flex justify-between items-center border-b border-slate-800 pb-2 gap-4 w-full">
       <div class="flex items-center gap-3">
         <span class="text-xl font-black flex items-center gap-2">
           <img src="exl_logo_rgb_orange_pos_94.png" alt="EXL Logo" class="h-6 md:h-7 w-auto object-contain" />
@@ -526,7 +526,7 @@
       <!-- Left Workspace Area (8 columns) -->
       <div class="lg:col-span-8 space-y-6 order-2 lg:order-1">
         <!-- Task details block -->
-        <div class="bg-slate-900 border border-slate-850 rounded-2xl p-5 relative overflow-hidden">
+        <div class="bg-slate-900 border border-slate-850 rounded-2xl p-2 mb-2 relative overflow-hidden">
           <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div class="flex items-start gap-4">
               <div class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/15 p-3 rounded-xl flex-shrink-0">
@@ -620,7 +620,7 @@
 
         <!-- Poker Table Felt Surface -->
         <div
-          class="bg-slate-900 border border-slate-850 p-6 rounded-3xl relative flex flex-col items-center justify-between min-h-[460px] overflow-hidden select-none">
+          class="bg-slate-900 border border-slate-850 p-3  rounded-3xl relative flex flex-col items-center justify-between min-h-[450px] overflow-hidden select-none">
 
           <!-- Voting Area Header info -->
           <div class="w-full flex justify-between items-center z-10 mb-4 pb-2.5 border-b border-slate-800/60 flex-shrink-0">
@@ -900,7 +900,7 @@
         </div>
 
         <!-- Estimation deck card grid -->
-        <div class="bg-slate-900 border border-slate-850 p-5 rounded-2xl">
+        <div class="bg-slate-900 border border-slate-850 p-3 rounded-2xl">
           <div
             class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4.5 border-b border-slate-855 pb-2.5">
             <div class="flex flex-wrap items-center gap-2">
