@@ -121,9 +121,8 @@ export class App implements OnInit, OnDestroy {
   // Pre-defined deck mapping helper
   get deckValues(): string[] {
     const DECK_VALUES_MAP = {
-      Fibonacci: ["0", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89", "?", "☕"],
-      TShirt: ["XS", "S", "M", "L", "XL", "XXL", "?", "☕"],
-      Sequential: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "?", "☕"]
+      Fibonacci: ["0.5", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89", "?"],
+      TShirt: ["XS", "S", "M", "L", "XL", "XXL", "?" ]
     };
     return (DECK_VALUES_MAP as any)[this.deckType] || DECK_VALUES_MAP.Fibonacci;
   }
@@ -139,7 +138,7 @@ export class App implements OnInit, OnDestroy {
     return colors[code % colors.length];
   }
 
-  get scrumMaster(): any {
+  get adminUser(): any {
     return this.participants.find(p => p.isHost);
   }
 
@@ -394,7 +393,7 @@ export class App implements OnInit, OnDestroy {
             return { ...p, isSelf: false };
           });
 
-          // Sort participants to ensure the Scrum Master (host) is always at the very top (index 0)
+          // Sort participants to ensure the Admin User (host) is always at the very top (index 0)
           // followed by isSelf (You) if not host, then sorted alphabetically by name
           mappedParticipants.sort((a: any, b: any) => {
             if (a.isHost && !b.isHost) return -1;
@@ -527,7 +526,7 @@ export class App implements OnInit, OnDestroy {
     this.connectSocket();
 
     if (isHost) {
-      this.addToast("You have created the room as the Scrum Master!", "success");
+      this.addToast("You have created the room as the Admin User!", "success");
     }
   }
 

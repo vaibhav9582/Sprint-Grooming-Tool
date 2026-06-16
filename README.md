@@ -7,17 +7,17 @@ A modern, real-time Planning Poker and sprint grooming application designed for 
 ## 🚀 Features
 
 - **Real-Time Multiplayer Poker**: Bidirectional sync utilizing WebSockets/Socket.io to track voter connections, card selections, card reveals, and round resets instantly.
-- **Scrum Master Controls**: 
+- **Admin Controls**: 
   - Host authorization checks.
   - Active ticket configuration.
   - Reveal cards, reset rounds, and custom discussion timer controls.
   - **Lock Score**: Save estimates to the backlog and auto-load the next pending ticket.
 - **Active Backlog Queue**: Manage, reorder, add, or delete sprint tickets. Completed tickets display finalized average scores and consensus agreement levels.
 - **Detailed Estimation Reporting**: 
-  - Scrum Master can export single-ticket logs or the consolidated session backlog.
+  - Admin User can export single-ticket logs or the consolidated session backlog.
   - Formats: **JSON** and normalized **CSV** (for easy import into Excel or Jira).
 - **Jira Integration**: Authenticate with your Jira instance and sync sprint issues directly into the backlog queue (with a mock Demo Mode for offline evaluation).
-- **Flexible Deck Systems**: Support for Fibonacci (`0-55`, `?`, `☕`), T-Shirt Size (`XS-XXL`, `?`, `☕`), and Sequential (`1-10`, `?`, `☕`).
+- **Flexible Deck Systems**: Support for Fibonacci (`0.5-55`, `?`) and T-Shirt Size (`XS-XXL`, `?`).
 - **Dynamic Seating & Aesthetics**: Vibrant layout mapping estimators around a central board. Responsive layout adjusts seamlessly from mobile cards to desktop seat arrays.
 - **Dual-Theme Support**: Instant toggle between premium Light Mode and dark-slate Dark Mode.
 
