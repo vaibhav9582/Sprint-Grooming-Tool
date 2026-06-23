@@ -145,6 +145,10 @@ export class App implements OnInit, OnDestroy {
     return this.participants.find(p => p.isHost);
   }
 
+  get canManageRoom(): boolean {
+    return this.userContext.isHost || this.userContext.isCoHost;
+  }
+
   get userRole(): string {
     return this.userContext.role || 'Estimator';
   }
