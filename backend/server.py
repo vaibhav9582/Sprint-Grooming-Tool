@@ -214,9 +214,10 @@ async def join_room(sid, data):
 
     if existing_index != -1:
         existing_vote = participants[existing_index].get('vote')
-        participants[existing_index] = {**user, 'isHost': is_host, 'vote': existing_vote}
+        existing_cohost = participants[existing_index].get('isCoHost', False)
+        participants[existing_index] = {**user, 'isHost': is_host, 'isCoHost': existing_cohost, 'vote': existing_vote}
     else:
-        participants.append({**user, 'isHost': is_host, 'vote': None})
+        participants.append({**user, 'isHost': is_host, 'isCoHost': False, 'vote': None})
 
     # Join the Socket.io room channel
     await sio.enter_room(sid, room_id)
@@ -255,7 +256,9 @@ async def reveal_cards(sid):
 
     room = rooms[room_id]
     room['showVotes'] = True
-    await sio.emit('sync-state', room, room=room_id)
+    payload = dict(room)
+    payload['justRevealed'] = True
+    await sio.emit('sync-state', payload, room=room_id)
     print(f"Cards revealed in room {room_id}")
 
 @sio.on('reset-round')
@@ -329,6 +332,40 @@ async def update_backlog(sid, data):
     room['backlog'] = backlog
     await sio.emit('sync-state', room, room=room_id)
     print(f"Backlog updated in room {room_id}")
+
+@sio.on('make-cohost')
+async def make_cohost(sid, data):
+    session = await sio.get_session(sid)
+    room_id = session.get('roomId')
+    user_id = session.get('userId')
+
+    if not room_id or room_id not in rooms:
+        return
+
+    room = rooms[room_id]
+    target_user_id = data.get('userId')
+    
+    # Only host can promote to co-admin
+    if user_id != room['hostUserId'] or not target_user_id or target_user_id == user_id:
+        return
+
+    target = next((p for p in room['participants'] if p['id'] == target_user_id), None)
+    if not target:
+        return
+
+    # Set the target as co-host
+    target['isCoHost'] = True
+
+    await sio.emit('sync-state', room, room=room_id)
+    await sio.emit(
+        'cohost-updated',
+        {
+            'message': f"{target.get('name')} has been promoted to Co-Admin!",
+            'participants': room['participants']
+        },
+        room=room_id
+    )
+    print(f"{target.get('name')} was promoted to Co-Admin in room {room_id}")
 
 @sio.event
 async def disconnect(sid):

@@ -26,6 +26,7 @@ export class App implements OnInit, OnDestroy {
     role: '',
     roomId: '',
     isHost: false,
+    isCoHost: false,
     sessionName: '',
     deckType: 'Fibonacci'
   };
@@ -72,6 +73,8 @@ export class App implements OnInit, OnDestroy {
   isMembersListOpen = false;
   isNavbarMenuOpen = false;
   isProfileOpen = false;
+  isCoAdminPopupOpen = false;
+  selectedMemberForPromotion: any = null;
   profileName = '';
   settingsTitle = '';
   settingsDesc = '';
@@ -121,7 +124,7 @@ export class App implements OnInit, OnDestroy {
   // Pre-defined deck mapping helper
   get deckValues(): string[] {
     const DECK_VALUES_MAP = {
-      Fibonacci: ["0.5", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89", "?"],
+      Fibonacci: ["0.5", "1", "2", "3", "5", "8", "13", "20", "30", "50", "80", "?"],
       TShirt: ["XS", "S", "M", "L", "XL", "XXL", "?" ]
     };
     return (DECK_VALUES_MAP as any)[this.deckType] || DECK_VALUES_MAP.Fibonacci;
@@ -356,7 +359,8 @@ export class App implements OnInit, OnDestroy {
             color: this.userContext.color,
             role: this.userContext.role,
             vote: this.selectedCard,
-            isHost: this.userContext.isHost
+            isHost: this.userContext.isHost,
+            isCoHost: this.userContext.isCoHost
           };
 
           this.socket.emit('join-room', {
@@ -388,6 +392,10 @@ export class App implements OnInit, OnDestroy {
                 this.userContext.isHost = p.isHost;
                 sessionStorage.setItem('sprint_grooming_user_context', JSON.stringify(this.userContext));
               }
+              if ((p.isCoHost || false) !== this.userContext.isCoHost) {
+                this.userContext.isCoHost = p.isCoHost || false;
+                sessionStorage.setItem('sprint_grooming_user_context', JSON.stringify(this.userContext));
+              }
               return { ...p, isSelf: true };
             }
             return { ...p, isSelf: false };
@@ -411,10 +419,13 @@ export class App implements OnInit, OnDestroy {
  
           this.updateConsensusValue();
  
-          // Canvas confetti check
-          if (this.showVotes) {
+          // Canvas confetti check: only trigger on a fresh admin reveal, not on page refresh.
+          if (state.showVotes && !this.showVotes && state.justRevealed) {
             this.startConfetti();
-          } else {
+            if (this.canManageRoom) {
+              this.handleLockEstimate(this.consensusValue);
+            }
+          } else if (!state.showVotes) {
             this.stopConfetti();
           }
           this.cdr.detectChanges();
@@ -434,6 +445,15 @@ export class App implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         });
       });
+
+      this.socket.on('cohost-updated', (data: any) => {
+        this.ngZone.run(() => {
+          if (data?.message) {
+            this.addToast(data.message, 'success');
+          }
+          this.cdr.detectChanges();
+        });
+      });
     });
   }
 
@@ -443,7 +463,7 @@ export class App implements OnInit, OnDestroy {
     }
 
     this.timerInterval = setInterval(() => {
-      if (this.isTimerRunning && this.userContext.isHost && this.socket) {
+      if (this.isTimerRunning && this.canManageRoom && this.socket) {
         if (this.timerSeconds <= 1) {
           this.isTimerRunning = false;
           this.timerSeconds = 0;
@@ -516,6 +536,7 @@ export class App implements OnInit, OnDestroy {
       role: finalRole,
       roomId: targetRoomId,
       isHost,
+      isCoHost: false,
       sessionName: isHost ? (this.sessionName.trim() || 'Sprint Session') : '',
       deckType: this.deckType
     };
@@ -553,6 +574,26 @@ export class App implements OnInit, OnDestroy {
     if (this.socket) {
       this.socket.emit('reset-round');
     }
+  }
+
+  openCoAdminPopup(member: any) {
+    if (this.userContext.isHost && !member.isHost && !member.isSelf) {
+      this.selectedMemberForPromotion = member;
+      this.isCoAdminPopupOpen = true;
+    }
+  }
+
+  closeCoAdminPopup() {
+    this.isCoAdminPopupOpen = false;
+    this.selectedMemberForPromotion = null;
+  }
+
+  promoteToCoAdmin() {
+    if (!this.userContext.isHost || !this.selectedMemberForPromotion || !this.socket) return;
+    
+    this.socket.emit('make-cohost', { userId: this.selectedMemberForPromotion.id });
+    this.addToast(`${this.selectedMemberForPromotion.name} has been promoted to Co-Admin!`, 'success');
+    this.closeCoAdminPopup();
   }
 
   handleDeckChange(type: string) {
@@ -640,7 +681,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   handleLockEstimate(consensusVal: string) {
-    if (!this.userContext.isHost || !this.socket || !this.taskInfo) return;
+    if (!this.canManageRoom || !this.socket || !this.taskInfo) return;
 
     const currentBacklog = this.backlog || [];
     const currentTask = this.taskInfo;
@@ -799,8 +840,7 @@ export class App implements OnInit, OnDestroy {
     this.inviteRoomFound = false;
     this.lobbyTab = 'create';
     this.currentScreen = 'home';
-    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, sessionName: '', deckType: 'Fibonacci' };
-    this.participants = [];
+    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, isCoHost: false, sessionName: '', deckType: 'Fibonacci' };    this.participants = [];
     this.backlog = [];
     this.taskInfo = null;
     this.selectedCard = null;
