@@ -670,7 +670,9 @@
                     [ngClass]="[getUserTheme(p.color).text, getUserTheme(p.color).border, userContext.isHost && !p.isHost && !p.isCoHost && !p.isSelf ? 'hover:ring-2 hover:ring-indigo-500' : '']"
                     [class.opacity-60]="p.isOffline">
                     {{p.avatar}}
-                    <span *ngIf="p.isOffline" class="absolute -bottom-1 -left-1 w-3.5 h-3.5 bg-rose-600 border border-slate-900 rounded-full flex items-center justify-center text-[7px] text-white font-bold" title="Offline">!</span>
+                    <span *ngIf="p.isOffline"
+                      class="absolute -bottom-1 -left-1 w-3.5 h-3.5 bg-rose-600 border border-slate-900 rounded-full flex items-center justify-center text-[7px] text-white font-bold"
+                      title="Offline">!</span>
                     <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-sm drop-shadow"
                       title="Session Host">&#x1F451;</span>
                     <span *ngIf="p.isCoHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-sm drop-shadow"
@@ -702,7 +704,8 @@
                       class="bg-slate-950 border border-slate-800 text-slate-555 text-[8px] px-1.5 py-0.5 rounded font-black uppercase tracking-wider animate-pulse-ring">
                       Thinking
                     </span>
-                    <div *ngIf="p.vote !== null && !p.isOffline" class="flip-card w-12 h-18" [class.flipped]="showVotes">
+                    <div *ngIf="p.vote !== null && !p.isOffline" class="flip-card w-12 h-18"
+                      [class.flipped]="showVotes">
                       <div class="flip-card-inner">
                         <div
                           class="flip-card-front flex items-center justify-center font-extrabold text-[20px] shadow-md border-2 border-amber-400 rounded-lg">
@@ -743,7 +746,9 @@
                   {{p.avatar}}
                   <span *ngIf="p.isHost" class="absolute -top-3.5 left-1/2 -translate-x-1/2 text-xs drop-shadow"
                     title="Session Host">👑</span>
-                  <span *ngIf="p.isOffline" class="absolute -bottom-1 -left-1 w-3.5 h-3.5 bg-rose-600 border border-slate-900 rounded-full flex items-center justify-center text-[7px] text-white font-bold" title="Offline">!</span>
+                  <span *ngIf="p.isOffline"
+                    class="absolute -bottom-1 -left-1 w-3.5 h-3.5 bg-rose-600 border border-slate-900 rounded-full flex items-center justify-center text-[7px] text-white font-bold"
+                    title="Offline">!</span>
                 </div>
 
                 <!-- Estimate Badge -->
