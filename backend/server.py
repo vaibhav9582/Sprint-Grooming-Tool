@@ -230,10 +230,11 @@ async def join_room(sid, data):
             'isHost': is_host,
             'isCoHost': existing_cohost,
             'vote': existing_vote,
-            'isOffline': False
+            'isOffline': False,
+            'sid': sid
         }
     else:
-        participants.append({**user, 'isHost': is_host, 'isCoHost': False, 'vote': None, 'isOffline': False})
+        participants.append({**user, 'isHost': is_host, 'isCoHost': False, 'vote': None, 'isOffline': False, 'sid': sid})
 
     # Join the Socket.io room channel
     await sio.enter_room(sid, room_id)
@@ -399,6 +400,11 @@ async def disconnect(sid):
 
     if index != -1:
         participant = participants[index]
+        # Ignore disconnect event if the user has already reconnected with a different socket (sid)
+        if participant.get('sid') != sid:
+            print(f"Ignored disconnect for user {participant.get('name')} - active connection has a different sid ({participant.get('sid')} vs {sid}).")
+            return
+
         was_host = participant.get('isHost', False)
         leaving_user_name = participant.get('name')
         
