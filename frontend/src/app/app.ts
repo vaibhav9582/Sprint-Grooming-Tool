@@ -420,9 +420,14 @@ export class App implements OnInit, OnDestroy {
           });
  
           this.participants = mappedParticipants;
- 
-          if (!state.showVotes && state.participants.find((p: any) => p.id === this.userContext.id)?.vote === null) {
-            this.selectedCard = null;
+
+          const selfPart = state.participants.find((p: any) => p.id === this.userContext.id);
+          if (selfPart) {
+            if (!state.showVotes && selfPart.vote === null) {
+              this.selectedCard = null;
+            } else if (selfPart.vote !== null) {
+              this.selectedCard = selfPart.vote;
+            }
           }
  
           this.updateConsensusValue();

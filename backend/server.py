@@ -122,6 +122,7 @@ socket_app = socketio.ASGIApp(sio, other_asgi_app=app)
 # In-memory Room State
 rooms = {}
 room_timeouts = {}
+user_disconnect_timeouts = {}
 
 # Helper to cancel active asyncio tasks (timeouts)
 def cancel_timeout(room_id: str, timeout_name: str):
@@ -161,6 +162,15 @@ async def join_room(sid, data):
         return
 
     user_id = user.get('id')
+
+    # Cancel user disconnect timeout if exists
+    user_key = (room_id, user_id)
+    if user_key in user_disconnect_timeouts:
+        task = user_disconnect_timeouts[user_key]
+        if task:
+            task.cancel()
+        del user_disconnect_timeouts[user_key]
+        print(f"Cancelled disconnect timeout for user {user.get('name')} rejoining room {room_id}.")
 
     # Initialize room state if it doesn't exist
     if room_id not in rooms:
@@ -215,9 +225,15 @@ async def join_room(sid, data):
     if existing_index != -1:
         existing_vote = participants[existing_index].get('vote')
         existing_cohost = participants[existing_index].get('isCoHost', False)
-        participants[existing_index] = {**user, 'isHost': is_host, 'isCoHost': existing_cohost, 'vote': existing_vote}
+        participants[existing_index] = {
+            **user,
+            'isHost': is_host,
+            'isCoHost': existing_cohost,
+            'vote': existing_vote,
+            'isOffline': False
+        }
     else:
-        participants.append({**user, 'isHost': is_host, 'isCoHost': False, 'vote': None})
+        participants.append({**user, 'isHost': is_host, 'isCoHost': False, 'vote': None, 'isOffline': False})
 
     # Join the Socket.io room channel
     await sio.enter_room(sid, room_id)
@@ -382,31 +398,58 @@ async def disconnect(sid):
     index = next((i for i, p in enumerate(participants) if p['id'] == user_id), -1)
 
     if index != -1:
-        was_host = participants[index].get('isHost', False)
-        leaving_user_name = participants[index].get('name')
+        participant = participants[index]
+        was_host = participant.get('isHost', False)
+        leaving_user_name = participant.get('name')
         
-        # Remove participant
-        participants.pop(index)
-        print(f"User {leaving_user_name} disconnected from room {room_id}")
+        # Mark participant as offline temporarily
+        participant['isOffline'] = True
+        print(f"User {leaving_user_name} disconnected temporarily from room {room_id}")
 
-        if room_id not in room_timeouts:
-            room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None}
+        # Broadcast the offline status to others immediately
+        await sio.emit('sync-state', room, room=room_id)
 
-        # Room empty check
-        if len(participants) == 0:
-            # Cancel any existing cleanup timers
-            cancel_timeout(room_id, 'cleanupTimeout')
-            # Start 15s grace cleanup timer
-            room_timeouts[room_id]['cleanupTimeout'] = asyncio.create_task(cleanup_room_delayed(room_id))
-            print(f"Room {room_id} is empty. Scheduled cleanup in 15 seconds.")
-        else:
-            # If host left, do not transfer host status
-            if was_host:
-                print(f"Host left room {room_id}. Host status will not be transferred.")
-            
-            # Sync new state and announce departure to active members
-            await sio.emit('sync-state', room, room=room_id)
-            await sio.emit('user-left', {'name': leaving_user_name}, room=room_id)
+        # Cancel any existing disconnect timeout for this user (just in case)
+        user_key = (room_id, user_id)
+        if user_key in user_disconnect_timeouts:
+            task = user_disconnect_timeouts[user_key]
+            if task:
+                task.cancel()
+
+        # Start 5s grace period for removal
+        async def remove_participant_delayed():
+            try:
+                await asyncio.sleep(5)
+                # Double check room and user still exist
+                if room_id in rooms:
+                    current_participants = rooms[room_id]['participants']
+                    curr_idx = next((i for i, p in enumerate(current_participants) if p['id'] == user_id), -1)
+                    if curr_idx != -1 and current_participants[curr_idx].get('isOffline'):
+                        # Remove participant permanently
+                        current_participants.pop(curr_idx)
+                        print(f"User {leaving_user_name} removed permanently from room {room_id} after 5s disconnect timeout.")
+                        
+                        if room_id not in room_timeouts:
+                            room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None}
+
+                        # Room empty check
+                        if len(current_participants) == 0:
+                            cancel_timeout(room_id, 'cleanupTimeout')
+                            room_timeouts[room_id]['cleanupTimeout'] = asyncio.create_task(cleanup_room_delayed(room_id))
+                            print(f"Room {room_id} is empty. Scheduled cleanup in 15 seconds.")
+                        else:
+                            if was_host:
+                                print(f"Host left room {room_id}. Host status will not be transferred.")
+                            await sio.emit('sync-state', rooms[room_id], room=room_id)
+                            await sio.emit('user-left', {'name': leaving_user_name}, room=room_id)
+                
+                # Clean up timeout reference
+                if user_key in user_disconnect_timeouts:
+                    del user_disconnect_timeouts[user_key]
+            except asyncio.CancelledError:
+                pass
+
+        user_disconnect_timeouts[user_key] = asyncio.create_task(remove_participant_delayed())
 
     print(f"Socket disconnected: {sid}")
 
