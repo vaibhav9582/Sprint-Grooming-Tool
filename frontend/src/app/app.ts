@@ -145,6 +145,10 @@ export class App implements OnInit, OnDestroy {
     return this.participants.find(p => p.isHost);
   }
 
+  get coAdmins(): any[] {
+    return this.participants.filter(p => p.isCoHost);
+  }
+
   get canManageRoom(): boolean {
     return this.userContext.isHost || this.userContext.isCoHost;
   }
@@ -631,7 +635,7 @@ export class App implements OnInit, OnDestroy {
   }
 
   handleSelectActiveTicket(ticket: any, currentBacklog = this.backlog) {
-    if (!this.userContext.isHost || !this.socket) return;
+    if (!this.canManageRoom || !this.socket) return;
     if (ticket.estimate !== null || ticket.status === 'completed') return;
 
     const updatedBacklog = (currentBacklog || []).map(item => {
@@ -796,7 +800,7 @@ export class App implements OnInit, OnDestroy {
 
   handleDeleteBacklogTicket(e: Event, ticketId: string) {
     e.stopPropagation();
-    if (!this.userContext.isHost || !this.socket) return;
+    if (!this.canManageRoom || !this.socket) return;
 
     const currentBacklog = this.backlog || [];
     const updatedBacklog = currentBacklog.filter(item => item.id !== ticketId);
