@@ -1477,9 +1477,9 @@ export class App implements OnInit, OnDestroy {
       3: 'P3: Low'
     };
     const STYLES: { [k: number]: string } = {
-      1: 'bg-rose-500/10 text-rose-500 border-rose-500/25',
-      2: 'bg-amber-500/10 text-amber-500 border-amber-500/25',
-      3: 'bg-slate-500/10 text-slate-400 border-slate-500/25'
+      1: 'bg-rose-500/10 dark:text-rose-500 text-rose-700 border-rose-500/25 dark:border-rose-500/25 border-rose-500/40',
+      2: 'bg-amber-500/10 dark:text-amber-500 text-amber-800 border-amber-500/25 dark:border-amber-500/25 border-amber-500/40',
+      3: 'bg-emerald-500/10 dark:text-emerald-400 text-emerald-700 border-emerald-500/25 dark:border-emerald-500/25 border-emerald-500/40'
     };
     return { label: LABELS[p], cls: STYLES[p] };
   }

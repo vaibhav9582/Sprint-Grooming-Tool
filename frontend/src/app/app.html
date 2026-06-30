@@ -189,27 +189,32 @@
           </div>
 
           <!-- Create Session Form -->
-          <div *ngIf="lobbyTab === 'create'" class="space-y-4">
+          <div *ngIf="lobbyTab === 'create'" class="space-y-2">
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Sprint Name</label>
               <input type="text" [(ngModel)]="sessionName" placeholder="e.g. Sprint 26 Grooming"
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
             </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Sprint Priority</label>
               <select [(ngModel)]="sessionPriority"
-                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
-                <option [ngValue]="1">P1: High</option>
-                <option [ngValue]="2">P2: Medium</option>
-                <option [ngValue]="3">P3: Low</option>
+                class="w-full bg-slate-955 border rounded-xl px-3 py-2 text-sm focus:outline-none cursor-pointer font-medium transition-all duration-200"
+                [ngClass]="{
+                  'border-rose-500/40 focus:border-rose-500 text-rose-700 dark:text-rose-450 bg-rose-500/5': sessionPriority == 1,
+                  'border-amber-500/40 focus:border-amber-500 text-amber-800 dark:text-amber-450 bg-amber-500/5': sessionPriority == 2,
+                  'border-emerald-500/40 focus:border-emerald-500 text-emerald-700 dark:text-emerald-450 bg-emerald-500/5': sessionPriority == 3
+                }">
+                <option [ngValue]="1" class="text-rose-700 dark:text-rose-400 bg-slate-950">P1: High</option>
+                <option [ngValue]="2" class="text-amber-800 dark:text-amber-400 bg-slate-950">P2: Medium</option>
+                <option [ngValue]="3" class="text-emerald-700 dark:text-emerald-400 bg-slate-950">P3: Low</option>
               </select>
             </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Your Display Name</label>
               <input type="text" [(ngModel)]="name" (ngModelChange)="errors.name = ''" placeholder="e.g. Nikita"
-                class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
+                class="w-full bg-slate-955 border rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
                 [class.border-rose-500]="errors.name" [class.border-slate-800]="!errors.name"
                 [class.focus:border-indigo-500]="!errors.name" />
               <span *ngIf="errors.name" class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.name}}</span>
@@ -218,7 +223,7 @@
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Estimation Techniques</label>
               <select [(ngModel)]="deckType"
-                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
+                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
                 <option value="Fibonacci">Fibonacci</option>
                 <option value="TShirt">T-Shirt Sizing</option>
               </select>
@@ -259,8 +264,7 @@
                 </div>
               </div>
               <p class="text-[9px] text-slate-550 font-semibold leading-relaxed">
-                Leave blank to open voting immediately. If set, members can join early but can only vote once voting
-                starts. The session stays open until the end time, or 2 days after the start if no end time is set.
+                Leave blank to start now. Scheduled voting opens at start time and closes at end time (default 2 days).
               </p>
             </div>
 
@@ -279,12 +283,12 @@
           </div>
 
           <!-- Join Session Form -->
-          <div *ngIf="lobbyTab === 'join'" class="space-y-4">
+          <div *ngIf="lobbyTab === 'join'" class="space-y-2">
             <div class="space-y-1.5">
               <label class="text-xs text-slate-405 font-bold block">Room ID</label>
               <input type="text" [(ngModel)]="roomIdInput" (ngModelChange)="errors.roomId = ''"
                 placeholder="e.g. EXL-A5B2F"
-                class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
+                class="w-full bg-slate-955 border rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
                 [class.border-rose-500]="errors.roomId" [class.border-slate-800]="!errors.roomId"
                 [class.focus:border-indigo-500]="!errors.roomId" />
               <span *ngIf="errors.roomId"
@@ -294,7 +298,7 @@
             <div class="space-y-1.5">
               <label class="text-xs text-slate-405 font-bold block">Your Display Name</label>
               <input type="text" [(ngModel)]="name" (ngModelChange)="errors.name = ''" placeholder="e.g. Nikita"
-                class="w-full bg-slate-955 border rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
+                class="w-full bg-slate-955 border rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium"
                 [class.border-rose-500]="errors.name" [class.border-slate-800]="!errors.name"
                 [class.focus:border-indigo-500]="!errors.name" />
               <span *ngIf="errors.name" class="text-[11px] text-rose-500 font-medium block mt-1">{{errors.name}}</span>
@@ -1401,10 +1405,15 @@
                   Priority <span class="text-rose-500">*</span>
                 </label>
                 <select [(ngModel)]="newTicketPriority" name="newTicketPriority" required
-                  class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none transition-all duration-300 font-bold shadow-inner cursor-pointer">
-                  <option [ngValue]="1">P1: High</option>
-                  <option [ngValue]="2">P2: Medium</option>
-                  <option [ngValue]="3">P3: Low</option>
+                  class="w-full bg-slate-955 border focus:ring-2 rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all duration-300 font-bold shadow-inner cursor-pointer"
+                  [ngClass]="{
+                    'border-rose-500/40 focus:border-rose-500 focus:ring-rose-500/20 text-rose-700 dark:text-rose-450 bg-rose-500/5': newTicketPriority == 1,
+                    'border-amber-500/40 focus:border-amber-500 focus:ring-amber-500/20 text-amber-800 dark:text-amber-450 bg-amber-500/5': newTicketPriority == 2,
+                    'border-emerald-500/40 focus:border-emerald-500 focus:ring-emerald-500/20 text-emerald-700 dark:text-emerald-450 bg-emerald-500/5': newTicketPriority == 3
+                  }">
+                  <option [ngValue]="1" class="text-rose-700 dark:text-rose-400 bg-slate-950">P1: High</option>
+                  <option [ngValue]="2" class="text-amber-800 dark:text-amber-400 bg-slate-950">P2: Medium</option>
+                  <option [ngValue]="3" class="text-emerald-700 dark:text-emerald-400 bg-slate-950">P3: Low</option>
                 </select>
               </div>
               <button type="submit"
