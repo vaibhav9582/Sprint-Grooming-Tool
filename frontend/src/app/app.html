@@ -196,20 +196,6 @@
                 class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-3 py-2 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
             </div>
 
-            <div class="space-y-1.5">
-              <label class="text-xs text-slate-400 font-bold block">Sprint Priority</label>
-              <select [(ngModel)]="sessionPriority"
-                class="w-full bg-slate-955 border rounded-xl px-3 py-2 text-sm focus:outline-none cursor-pointer font-medium transition-all duration-200"
-                [ngClass]="{
-                  'border-rose-500/40 focus:border-rose-500 text-rose-700 dark:text-rose-450 bg-rose-500/5': sessionPriority == 1,
-                  'border-amber-500/40 focus:border-amber-500 text-amber-800 dark:text-amber-450 bg-amber-500/5': sessionPriority == 2,
-                  'border-emerald-500/40 focus:border-emerald-500 text-emerald-700 dark:text-emerald-450 bg-emerald-500/5': sessionPriority == 3
-                }">
-                <option [ngValue]="1" class="text-rose-700 dark:text-rose-400 bg-slate-950">P1: High</option>
-                <option [ngValue]="2" class="text-amber-800 dark:text-amber-400 bg-slate-950">P2: Medium</option>
-                <option [ngValue]="3" class="text-emerald-700 dark:text-emerald-400 bg-slate-950">P3: Low</option>
-              </select>
-            </div>
 
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Your Display Name</label>
