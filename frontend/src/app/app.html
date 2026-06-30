@@ -193,7 +193,17 @@
             <div class="space-y-1.5">
               <label class="text-xs text-slate-400 font-bold block">Sprint Name</label>
               <input type="text" [(ngModel)]="sessionName" placeholder="e.g. Sprint 26 Grooming"
-                class="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-650 focus:outline-none font-medium" />
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="text-xs text-slate-400 font-bold block">Sprint Priority</label>
+              <select [(ngModel)]="sessionPriority"
+                class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none cursor-pointer font-medium">
+                <option [ngValue]="1">P1: High</option>
+                <option [ngValue]="2">P2: Medium</option>
+                <option [ngValue]="3">P3: Low</option>
+              </select>
             </div>
 
             <div class="space-y-1.5">
@@ -214,11 +224,26 @@
               </select>
             </div>
 
+            <!-- Toggle Scheduled Voting (Collapsible header) -->
+            <button type="button" (click)="showScheduleForm = !showScheduleForm"
+              class="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-750 focus:border-indigo-500 rounded-xl px-4 py-2.5 cursor-pointer text-left transition-all select-none">
+              <span class="text-xs text-slate-300 font-bold flex items-center gap-1.5">
+                <span>Schedule Voting Session</span>
+                <span class="text-[9px] text-indigo-450 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">Optional</span>
+              </span>
+              <!-- Arrow Icon -->
+              <svg xmlns="http://www.w3.org/2500/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                class="text-slate-400 transition-transform duration-200" [class.rotate-180]="showScheduleForm">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+
             <!-- Scheduled Voting Window (optional) -->
-            <div class="space-y-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3">
+            <div *ngIf="showScheduleForm" class="space-y-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3">
               <div class="flex items-center justify-between">
-                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider">Schedule Voting
-                  (optional)</span>
+                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider">Schedule Voting</span>
                 <span class="text-[9px] text-slate-500 font-semibold">Create 1–2 days ahead</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -307,6 +332,7 @@
             Sprint Grooming Tool
           </span>
         </span>
+
         <span
           class="inline-flex items-center gap-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] uppercase tracking-wider font-black px-2.5 py-0.5 rounded-md">
           <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
@@ -696,6 +722,10 @@
                     <span
                       class="text-[9px] bg-slate-950 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black font-mono">
                       {{taskInfo.id}}
+                    </span>
+                    <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
+                      [ngClass]="getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).cls">
+                      {{ getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).label }}
                     </span>
                   </div>
 
@@ -1243,9 +1273,9 @@
                     class="text-[9px] font-bold font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                     {{ticket.id}}
                   </span>
-                  <span *ngIf="ticket.id !== 'INFO'" class="text-[9px] font-black px-1.5 py-0.5 rounded border"
-                    [ngClass]="getPriorityMeta(ticket.priority).cls" title="Story priority (5 = highest, 1 = lowest)">
-                    {{ getPriorityMeta(ticket.priority).label }}
+                  <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
+                    [ngClass]="getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).cls" title="Story priority (5 = highest, 1 = lowest)">
+                    {{ getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).label }}
                   </span>
                   <span *ngIf="canManageRoom && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
                     (click)="handleSelectActiveTicket(ticket)"
@@ -1372,11 +1402,9 @@
                 </label>
                 <select [(ngModel)]="newTicketPriority" name="newTicketPriority" required
                   class="w-full bg-slate-955 border border-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none transition-all duration-300 font-bold shadow-inner cursor-pointer">
-                  <option [ngValue]="5">P5 — Highest</option>
-                  <option [ngValue]="4">P4 — High</option>
-                  <option [ngValue]="3">P3 — Medium</option>
-                  <option [ngValue]="2">P2 — Low</option>
-                  <option [ngValue]="1">P1 — Lowest</option>
+                  <option [ngValue]="1">P1: High</option>
+                  <option [ngValue]="2">P2: Medium</option>
+                  <option [ngValue]="3">P3: Low</option>
                 </select>
               </div>
               <button type="submit"

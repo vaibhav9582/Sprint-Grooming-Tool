@@ -239,6 +239,7 @@ async def join_room(sid, data):
     room_id = data.get('roomId')
     user = data.get('user')
     session_name = data.get('sessionName')
+    session_priority = data.get('sessionPriority', 'Medium')
     deck_type = data.get('deckType', 'Fibonacci')
     voting_start_at = data.get('votingStartAt')
     voting_end_at = data.get('votingEndAt')
@@ -288,7 +289,7 @@ async def join_room(sid, data):
                 'id': 'INFO',
                 'title': initial_task['title'],
                 'desc': initial_task['desc'],
-                'priority': None,
+                'priority': session_priority,
                 'estimate': None,
                 'status': 'active',
                 'votesHistory': None,
@@ -303,7 +304,8 @@ async def join_room(sid, data):
             'votingEndAt': voting_end_at or None,
             'expiresAt': expires_at,
             'sessionClosed': False,
-            'closedAt': None
+            'closedAt': None,
+            'sessionPriority': session_priority
         }
         room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None}
     else:

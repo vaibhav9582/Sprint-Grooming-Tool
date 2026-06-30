@@ -28,6 +28,7 @@ export class App implements OnInit, OnDestroy {
     isHost: false,
     isCoHost: false,
     sessionName: '',
+    sessionPriority: 2,
     deckType: 'Fibonacci',
     votingStartAt: '',
     votingEndAt: ''
@@ -36,6 +37,7 @@ export class App implements OnInit, OnDestroy {
   // Scheduled session window (Create Session form inputs, datetime-local strings)
   votingStartInput = '';
   votingEndInput = '';
+  showScheduleForm = false;
 
   // Scheduled session window (synced from server, absolute UTC ISO strings)
   syncedVotingStartAt: string | null = null;
@@ -74,7 +76,7 @@ export class App implements OnInit, OnDestroy {
   editDesc = '';
   newTicketTitle = '';
   newTicketDesc = '';
-  newTicketPriority = 3;
+  newTicketPriority = 2;
 
   // Story import source tabs
   jiraTab: 'manual' | 'jira' | 'csv' = 'manual';
@@ -429,6 +431,7 @@ export class App implements OnInit, OnDestroy {
             roomId: this.userContext.roomId,
             user: selfPart,
             sessionName: this.userContext.sessionName,
+            sessionPriority: this.userContext.sessionPriority || 3,
             deckType: this.userContext.deckType,
             votingStartAt: this.userContext.votingStartAt || null,
             votingEndAt: this.userContext.votingEndAt || null
@@ -445,6 +448,13 @@ export class App implements OnInit, OnDestroy {
           this.taskInfo = state.taskInfo;
           this.backlog = state.backlog || [];
           this.showVotes = state.showVotes;
+
+          if (state.sessionName) {
+            this.userContext.sessionName = state.sessionName;
+          }
+          if (state.sessionPriority) {
+            this.userContext.sessionPriority = state.sessionPriority;
+          }
 
           // Scheduled session window (Feature 1)
           this.syncedVotingStartAt = state.votingStartAt || null;
@@ -642,7 +652,7 @@ export class App implements OnInit, OnDestroy {
     // Scheduled voting window (only applies when the host sets a start time)
     let votingStartIso = '';
     let votingEndIso = '';
-    if (isHost && this.votingStartInput) {
+    if (isHost && this.showScheduleForm && this.votingStartInput) {
       const start = new Date(this.votingStartInput);
       if (isNaN(start.getTime())) {
         this.addToast('Please enter a valid voting start date & time.', 'error');
@@ -678,6 +688,7 @@ export class App implements OnInit, OnDestroy {
       isHost,
       isCoHost: false,
       sessionName: isHost ? (this.sessionName.trim() || 'Sprint Session') : '',
+      sessionPriority: isHost ? this.sessionPriority : 3,
       deckType: this.deckType,
       votingStartAt: votingStartIso,
       votingEndAt: votingEndIso
@@ -822,7 +833,7 @@ export class App implements OnInit, OnDestroy {
 
     this.newTicketTitle = '';
     this.newTicketDesc = '';
-    this.newTicketPriority = 3;
+    this.newTicketPriority = 2;
 
     // Auto activate first story if none active
     if (!this.taskInfo || this.taskInfo.id === 'INFO') {
@@ -1099,7 +1110,7 @@ export class App implements OnInit, OnDestroy {
     this.inviteRoomFound = false;
     this.lobbyTab = 'create';
     this.currentScreen = 'home';
-    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, isCoHost: false, sessionName: '', deckType: 'Fibonacci', votingStartAt: '', votingEndAt: '' };    this.participants = [];
+    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, isCoHost: false, sessionName: '', sessionPriority: 2, deckType: 'Fibonacci', votingStartAt: '', votingEndAt: '' };    this.participants = [];
     this.backlog = [];
     this.taskInfo = null;
     this.selectedCard = null;
@@ -1441,29 +1452,34 @@ export class App implements OnInit, OnDestroy {
   }
 
   // ----- Priority helpers (Feature 2 & 3) -----
-  // Coerce any incoming priority into a valid 1..5 integer; default to 1.
+  // Coerce any incoming priority into a valid 1..3 integer; default to 2.
   normalizePriority(val: any): number {
     const n = parseInt(val, 10);
-    if (!isNaN(n) && n >= 1 && n <= 5) return n;
-    return 1;
+    if (!isNaN(n)) {
+      if (n === 1) return 1;
+      if (n === 2) return 2;
+      if (n === 3) return 3;
+      if (n === 4 || n === 5) return 1;
+    }
+    const s = String(val).toLowerCase();
+    if (s.includes('high') || s.includes('p1')) return 1;
+    if (s.includes('medium') || s.includes('p2')) return 2;
+    if (s.includes('low') || s.includes('p3')) return 3;
+    return 2;
   }
 
-  // Badge label + theme classes for a story priority (1 lowest .. 5 highest)
+  // Badge label + theme classes for a story priority (1 High .. 3 Low)
   getPriorityMeta(priority: any): { label: string; cls: string } {
     const p = this.normalizePriority(priority);
     const LABELS: { [k: number]: string } = {
-      1: 'P1 Low',
-      2: 'P2',
-      3: 'P3',
-      4: 'P4',
-      5: 'P5 High'
+      1: 'P1: High',
+      2: 'P2: Medium',
+      3: 'P3: Low'
     };
     const STYLES: { [k: number]: string } = {
-      1: 'bg-slate-500/10 text-slate-400 border-slate-500/25',
-      2: 'bg-blue-500/10 text-blue-400 border-blue-500/25',
-      3: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/25',
-      4: 'bg-amber-500/10 text-amber-500 border-amber-500/25',
-      5: 'bg-rose-500/10 text-rose-500 border-rose-500/25'
+      1: 'bg-rose-500/10 text-rose-500 border-rose-500/25',
+      2: 'bg-amber-500/10 text-amber-500 border-amber-500/25',
+      3: 'bg-slate-500/10 text-slate-400 border-slate-500/25'
     };
     return { label: LABELS[p], cls: STYLES[p] };
   }
@@ -1478,7 +1494,7 @@ export class App implements OnInit, OnDestroy {
         if (b.t.id === 'INFO' && a.t.id !== 'INFO') return 1;
         const pa = this.normalizePriority(a.t.priority);
         const pb = this.normalizePriority(b.t.priority);
-        if (pb !== pa) return pb - pa;
+        if (pb !== pa) return pa - pb;
         return a.i - b.i;
       })
       .map(x => x.t);
@@ -1545,6 +1561,24 @@ export class App implements OnInit, OnDestroy {
 
   set sessionName(val: string) {
     this.userContext.sessionName = val;
+  }
+
+  get sessionPriority(): number {
+    return Number(this.userContext.sessionPriority) || 2;
+  }
+
+  set sessionPriority(val: number) {
+    this.userContext.sessionPriority = val;
+  }
+
+  getPriorityText(priority: any): string {
+    const p = Number(priority);
+    const map: Record<number, string> = {
+      1: 'High',
+      2: 'Medium',
+      3: 'Low'
+    };
+    return map[p] || 'Medium';
   }
 
   startConfetti() {
