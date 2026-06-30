@@ -804,7 +804,7 @@ export class App implements OnInit, OnDestroy {
     });
 
     this.socket.emit('update-ticket', {
-      taskInfo: { id: ticket.id, title: ticket.title, desc: ticket.desc }
+      taskInfo: { id: ticket.id, title: ticket.title, desc: ticket.desc, priority: ticket.priority }
     });
     this.socket.emit('update-backlog', { backlog: updatedBacklog });
   }
@@ -828,25 +828,24 @@ export class App implements OnInit, OnDestroy {
 
     const currentBacklog = this.backlog || [];
     const updated = [...currentBacklog, newTicket];
-    this.socket.emit('update-backlog', { backlog: updated });
-    this.addToast(`Ticket "${newTicket.title}" added to backlog!`, 'success');
 
     this.newTicketTitle = '';
     this.newTicketDesc = '';
     this.newTicketPriority = 2;
 
-    // Auto activate first story if none active
-    if (!this.taskInfo || this.taskInfo.id === 'INFO') {
-      this.socket.emit('update-ticket', {
-        taskInfo: { id: newTicket.id, title: newTicket.title, desc: newTicket.desc }
-      });
-      const updatedWithActive = updated.map(item => {
-        if (item.id === newId) return { ...item, status: 'active' };
-        if (item.status === 'active') return { ...item, status: 'pending' };
-        return item;
-      });
-      this.socket.emit('update-backlog', { backlog: updatedWithActive });
-    }
+    // Set newly added ticket as active automatically
+    const updatedWithActive = updated.map(item => {
+      if (item.id === newId) return { ...item, status: 'active' };
+      if (item.status === 'active') return { ...item, status: 'pending' };
+      return item;
+    });
+
+    this.socket.emit('update-ticket', {
+      taskInfo: { id: newTicket.id, title: newTicket.title, desc: newTicket.desc, priority: newTicket.priority }
+    });
+    this.socket.emit('update-backlog', { backlog: updatedWithActive });
+    this.socket.emit('reset-round');
+    this.addToast(`Ticket "${newTicket.title}" added and set as active target!`, 'success');
   }
 
   handleLockEstimate(consensusVal: string) {
@@ -902,7 +901,8 @@ export class App implements OnInit, OnDestroy {
     const newInfo = {
       id: this.taskInfo.id,
       title: this.editTitle.trim(),
-      desc: this.editDesc.trim()
+      desc: this.editDesc.trim(),
+      priority: this.taskInfo.priority
     };
 
     this.socket.emit('update-ticket', { taskInfo: newInfo });
@@ -923,10 +923,13 @@ export class App implements OnInit, OnDestroy {
     if (!title.trim() || !this.socket) return;
 
     const taskId = this.taskInfo ? this.taskInfo.id : `TICKET-${Math.floor(Math.random() * 900) + 100}`;
+    const existingTicket = (this.backlog || []).find(item => item.id === taskId);
+    const priorityVal = existingTicket ? existingTicket.priority : 1;
     const newInfo = {
       id: taskId,
       title: title.trim(),
-      desc: desc.trim()
+      desc: desc.trim(),
+      priority: priorityVal
     };
 
     this.socket.emit('update-ticket', { taskInfo: newInfo });
@@ -1749,7 +1752,7 @@ export class App implements OnInit, OnDestroy {
     if (!this.taskInfo || this.taskInfo.id === 'INFO') {
       const firstImported = this.getSortedBacklog(uniqueNewTickets)[0];
       this.socket.emit('update-ticket', {
-        taskInfo: { id: firstImported.id, title: firstImported.title, desc: firstImported.desc }
+        taskInfo: { id: firstImported.id, title: firstImported.title, desc: firstImported.desc, priority: firstImported.priority }
       });
       const updatedWithActive = updated.map(item => {
         if (item.id === firstImported.id) return { ...item, status: 'active' };
@@ -1967,7 +1970,7 @@ export class App implements OnInit, OnDestroy {
     if (!this.taskInfo || this.taskInfo.id === 'INFO') {
       const firstImported = this.getSortedBacklog(uniqueNewTickets)[0];
       this.socket.emit('update-ticket', {
-        taskInfo: { id: firstImported.id, title: firstImported.title, desc: firstImported.desc }
+        taskInfo: { id: firstImported.id, title: firstImported.title, desc: firstImported.desc, priority: firstImported.priority }
       });
       const updatedWithActive = updated.map(item => {
         if (item.id === firstImported.id) return { ...item, status: 'active' };
