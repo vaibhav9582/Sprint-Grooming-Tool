@@ -700,10 +700,9 @@
                       class="text-[9px] bg-slate-950 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black font-mono">
                       {{taskInfo.id}}
                     </span>
-                    <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
-                      [ngClass]="getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).cls">
-                      {{ getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).label
-                      }}
+                    <span *ngIf="taskInfo.id !== 'INFO'" class="text-[9px] font-black px-1.5 py-0.5 rounded border"
+                      [ngClass]="getPriorityMeta(taskInfo.priority).cls">
+                      {{ getPriorityMeta(taskInfo.priority).label }}
                     </span>
                   </div>
 
@@ -1251,10 +1250,10 @@
                     class="text-[9px] font-bold font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                     {{ticket.id}}
                   </span>
-                  <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
-                    [ngClass]="getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).cls"
+                  <span *ngIf="ticket.id !== 'INFO'" class="text-[9px] font-black px-1.5 py-0.5 rounded border"
+                    [ngClass]="getPriorityMeta(ticket.priority).cls"
                     title="Story priority (5 = highest, 1 = lowest)">
-                    {{ getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).label }}
+                    {{ getPriorityMeta(ticket.priority).label }}
                   </span>
                   <span *ngIf="canManageRoom && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
                     (click)="handleSelectActiveTicket(ticket)"
