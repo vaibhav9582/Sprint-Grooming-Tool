@@ -229,26 +229,13 @@
               </select>
             </div>
 
-            <!-- Toggle Scheduled Voting (Collapsible header) -->
-            <button type="button" (click)="showScheduleForm = !showScheduleForm"
-              class="w-full flex items-center justify-between bg-slate-950 border border-slate-800 hover:border-slate-750 focus:border-indigo-500 rounded-xl px-4 py-2.5 cursor-pointer text-left transition-all select-none">
-              <span class="text-xs text-slate-300 font-bold flex items-center gap-1.5">
-                <span>Schedule Voting Session</span>
-                <span class="text-[9px] text-indigo-450 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">Optional</span>
-              </span>
-              <!-- Arrow Icon -->
-              <svg xmlns="http://www.w3.org/2500/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
-                class="text-slate-400 transition-transform duration-200" [class.rotate-180]="showScheduleForm">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-
-
             <!-- Scheduled Voting Window (optional) -->
-            <div *ngIf="showScheduleForm" class="space-y-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3">
+            <div class="space-y-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3">
               <div class="flex items-center justify-between">
-                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider">Schedule Voting</span>
+                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider flex items-center gap-1.5">
+                  <span>Schedule Voting</span>
+                  <span class="text-[9px] text-indigo-450 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">Optional</span>
+                </span>
                 <span class="text-[9px] text-slate-500 font-semibold">Create 1–2 days ahead</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -729,7 +716,8 @@
                     </span>
                     <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
                       [ngClass]="getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).cls">
-                      {{ getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).label }}
+                      {{ getPriorityMeta(taskInfo.id === 'INFO' ? userContext.sessionPriority : taskInfo.priority).label
+                      }}
                     </span>
                   </div>
 
@@ -1278,7 +1266,8 @@
                     {{ticket.id}}
                   </span>
                   <span class="text-[9px] font-black px-1.5 py-0.5 rounded border"
-                    [ngClass]="getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).cls" title="Story priority (5 = highest, 1 = lowest)">
+                    [ngClass]="getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).cls"
+                    title="Story priority (5 = highest, 1 = lowest)">
                     {{ getPriorityMeta(ticket.id === 'INFO' ? userContext.sessionPriority : ticket.priority).label }}
                   </span>
                   <span *ngIf="canManageRoom && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
