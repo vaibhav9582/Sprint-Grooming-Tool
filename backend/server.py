@@ -3,6 +3,7 @@ import asyncio
 import urllib.request
 import json
 import base64
+from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -36,17 +37,20 @@ async def get_jira_sprint_issues(data: dict):
             {
                 "id": "JIRA-101",
                 "title": "Auth Service Integration",
-                "desc": "Implement OAuth2 authentication flow and connect to the user database."
+                "desc": "Implement OAuth2 authentication flow and connect to the user database.",
+                "priority": 5
             },
             {
                 "id": "JIRA-102",
                 "title": "Database Optimization",
-                "desc": "Optimize PostgreSQL indexes for high-frequency queries on the transaction log table."
+                "desc": "Optimize PostgreSQL indexes for high-frequency queries on the transaction log table.",
+                "priority": 3
             },
             {
                 "id": "JIRA-103",
                 "title": "Docker Setup",
-                "desc": "Containerize the FastAPI backend and Angular frontend for production deployment."
+                "desc": "Containerize the FastAPI backend and Angular frontend for production deployment.",
+                "priority": 2
             }
         ]
         return {"success": True, "issues": mock_issues}
@@ -102,11 +106,34 @@ async def get_jira_sprint_issues(data: dict):
                     desc = str(raw_desc)
             else:
                 desc = str(raw_desc) if raw_desc else ""
-                
+
+            # Map Jira priority name -> numeric 1..5 (default 1 if missing/unknown)
+            priority_val = 1
+            try:
+                raw_priority = fields.get("priority")
+                if isinstance(raw_priority, dict):
+                    p_name = (raw_priority.get("name") or "").strip().lower()
+                    priority_map = {
+                        "lowest": 1,
+                        "low": 2,
+                        "medium": 3,
+                        "high": 4,
+                        "highest": 5,
+                        "critical": 5,
+                        "blocker": 5,
+                        "trivial": 1,
+                        "minor": 2,
+                        "major": 4,
+                    }
+                    priority_val = priority_map.get(p_name, 1)
+            except Exception:
+                priority_val = 1
+
             issues.append({
                 "id": issue_id,
                 "title": title,
-                "desc": desc
+                "desc": desc,
+                "priority": priority_val
             })
             
         return {"success": True, "issues": issues}
@@ -124,6 +151,57 @@ rooms = {}
 room_timeouts = {}
 user_disconnect_timeouts = {}
 
+
+# ----- Scheduled session window helpers -----
+def parse_iso(value):
+    """Parse an ISO datetime string (UTC, optionally ending in 'Z') into an
+    aware datetime. Returns None if the value is empty or unparseable."""
+    if not value:
+        return None
+    try:
+        s = str(value).strip()
+        if s.endswith('Z'):
+            s = s[:-1] + '+00:00'
+        dt = datetime.fromisoformat(s)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
+    except Exception:
+        return None
+
+
+def compute_expires_at(voting_start_at, voting_end_at):
+    """Session stays accessible until the selected voting end date, or 2 days
+    after the voting start date when no end date is provided."""
+    start = parse_iso(voting_start_at)
+    end = parse_iso(voting_end_at)
+    if end:
+        return end.isoformat()
+    if start:
+        return (start + timedelta(days=2)).isoformat()
+    return None
+
+
+def get_session_status(room):
+    """Returns one of 'none' | 'upcoming' | 'open' | 'expired' | 'closed'.
+
+    'none' means the room was created without a schedule (legacy behaviour) and
+    voting is always allowed. 'closed' means an admin/co-admin has ended the
+    session; voting is permanently disabled but the final report stays available."""
+    if room.get('sessionClosed'):
+        return 'closed'
+    start = parse_iso(room.get('votingStartAt'))
+    if not start:
+        return 'none'
+    now = datetime.now(timezone.utc)
+    expires = parse_iso(room.get('expiresAt'))
+    if expires and now > expires:
+        return 'expired'
+    if now < start:
+        return 'upcoming'
+    return 'open'
+
+
 # Helper to cancel active asyncio tasks (timeouts)
 def cancel_timeout(room_id: str, timeout_name: str):
     if room_id in room_timeouts and timeout_name in room_timeouts[room_id]:
@@ -137,6 +215,11 @@ async def cleanup_room_delayed(room_id: str):
     try:
         await asyncio.sleep(15)  # 15 seconds grace period
         if room_id in rooms and len(rooms[room_id]['participants']) == 0:
+            # Retain closed sessions so anyone re-opening the join link can still
+            # view the "Voting is now closed" message and download the report.
+            if rooms[room_id].get('sessionClosed'):
+                print(f"Room {room_id} is closed; retaining for report access.")
+                return
             del rooms[room_id]
             if room_id in room_timeouts:
                 del room_timeouts[room_id]
@@ -157,6 +240,8 @@ async def join_room(sid, data):
     user = data.get('user')
     session_name = data.get('sessionName')
     deck_type = data.get('deckType', 'Fibonacci')
+    voting_start_at = data.get('votingStartAt')
+    voting_end_at = data.get('votingEndAt')
 
     if not room_id or not user:
         return
@@ -174,6 +259,19 @@ async def join_room(sid, data):
 
     # Initialize room state if it doesn't exist
     if room_id not in rooms:
+        # Validate scheduled voting window (only when a start time is provided).
+        # The voting start must be in the future; otherwise reject creation.
+        parsed_start = parse_iso(voting_start_at)
+        if parsed_start is not None and parsed_start <= datetime.now(timezone.utc):
+            await sio.emit(
+                'session-error',
+                {'message': 'Voting start time must be in the future.'},
+                to=sid
+            )
+            return
+
+        expires_at = compute_expires_at(voting_start_at, voting_end_at)
+
         initial_task = None
         if session_name:
             initial_task = {
@@ -190,6 +288,7 @@ async def join_room(sid, data):
                 'id': 'INFO',
                 'title': initial_task['title'],
                 'desc': initial_task['desc'],
+                'priority': None,
                 'estimate': None,
                 'status': 'active',
                 'votesHistory': None,
@@ -198,7 +297,13 @@ async def join_room(sid, data):
             }] if initial_task else [],
             'showVotes': False,
             'deckType': deck_type,
-            'hostUserId': user_id
+            'hostUserId': user_id,
+            'createdAt': datetime.now(timezone.utc).isoformat(),
+            'votingStartAt': voting_start_at or None,
+            'votingEndAt': voting_end_at or None,
+            'expiresAt': expires_at,
+            'sessionClosed': False,
+            'closedAt': None
         }
         room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None}
     else:
@@ -211,6 +316,15 @@ async def join_room(sid, data):
             cancel_timeout(room_id, 'hostTransferTimeout')
 
     room = rooms[room_id]
+
+    # Block joining a session that has already expired.
+    if get_session_status(room) == 'expired':
+        await sio.emit(
+            'session-error',
+            {'message': 'This voting session has expired.', 'expired': True},
+            to=sid
+        )
+        return
 
     # Save room and user info inside connection session for quick retrieval
     await sio.save_session(sid, {'roomId': room_id, 'userId': user_id})
@@ -255,7 +369,27 @@ async def cast_vote(sid, data):
 
     vote = data.get('vote')
     room = rooms[room_id]
-    
+
+    # Enforce the scheduled voting window before recording any vote.
+    status = get_session_status(room)
+    if status == 'closed':
+        await sio.emit(
+            'session-error',
+            {'message': 'Voting is now closed for this session.', 'closed': True},
+            to=sid
+        )
+        return
+    if status == 'upcoming':
+        await sio.emit('session-error', {'message': 'Voting has not started yet.'}, to=sid)
+        return
+    if status == 'expired':
+        await sio.emit(
+            'session-error',
+            {'message': 'This voting session has expired.', 'expired': True},
+            to=sid
+        )
+        return
+
     # Locate participant and cast vote
     participant = next((p for p in room['participants'] if p['id'] == user_id), None)
     if participant:
@@ -332,6 +466,9 @@ async def update_ticket(sid, data):
 
     task_info = data.get('taskInfo')
     room = rooms[room_id]
+    # A closed session's board is immutable so the final report stays intact.
+    if room.get('sessionClosed'):
+        return
     room['taskInfo'] = task_info
     await sio.emit('sync-state', room, room=room_id)
     print(f"Active ticket updated in room {room_id}")
@@ -346,6 +483,9 @@ async def update_backlog(sid, data):
 
     backlog = data.get('backlog')
     room = rooms[room_id]
+    # A closed session's backlog is frozen so the final report stays intact.
+    if room.get('sessionClosed'):
+        return
     room['backlog'] = backlog
     await sio.emit('sync-state', room, room=room_id)
     print(f"Backlog updated in room {room_id}")
@@ -383,6 +523,53 @@ async def make_cohost(sid, data):
         room=room_id
     )
     print(f"{target.get('name')} was promoted to Co-Admin in room {room_id}")
+
+
+@sio.on('close-session')
+async def close_session(sid, data=None):
+    session = await sio.get_session(sid)
+    room_id = session.get('roomId')
+    user_id = session.get('userId')
+
+    if not room_id or room_id not in rooms:
+        return
+
+    room = rooms[room_id]
+
+    # Only the Admin (host) or a Co-Admin may close the session.
+    is_host = user_id == room.get('hostUserId')
+    participant = next((p for p in room['participants'] if p['id'] == user_id), None)
+    is_cohost = bool(participant.get('isCoHost')) if participant else False
+    if not (is_host or is_cohost):
+        await sio.emit(
+            'session-error',
+            {'message': 'Only the Admin or Co-Admin can close the session.'},
+            to=sid
+        )
+        return
+
+    if room.get('sessionClosed'):
+        return  # already closed; nothing to do
+
+    # Mark every story as completed while preserving existing estimates/history.
+    for item in room.get('backlog', []):
+        if item.get('id') == 'INFO':
+            continue
+        item['status'] = 'completed'
+
+    room['sessionClosed'] = True
+    room['closedAt'] = datetime.now(timezone.utc).isoformat()
+    room['showVotes'] = False
+    room['taskInfo'] = None
+
+    await sio.emit('sync-state', room, room=room_id)
+    await sio.emit(
+        'session-closed',
+        {'message': 'Voting is now closed for this session.'},
+        room=room_id
+    )
+    print(f"Session closed in room {room_id} by {'host' if is_host else 'co-host'} {user_id}")
+
 
 @sio.event
 async def disconnect(sid):
