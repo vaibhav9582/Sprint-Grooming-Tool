@@ -217,7 +217,8 @@
             <!-- Scheduled Voting Window (optional) -->
             <div class="space-y-2 rounded-xl border border-slate-800 bg-slate-950/40 p-3">
               <div class="flex items-center justify-between">
-                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider">Schedule Voting (optional)</span>
+                <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider">Schedule Voting
+                  (optional)</span>
                 <span class="text-[9px] text-slate-500 font-semibold">Create 1–2 days ahead</span>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -319,8 +320,7 @@
             'bg-rose-500/10 text-rose-500 border-rose-500/25': sessionStatus === 'expired',
             'bg-slate-700/30 text-slate-300 border-slate-600/40': sessionStatus === 'closed'
           }" [title]="sessionScheduleText">
-          <span class="w-1.5 h-1.5 rounded-full"
-            [ngClass]="{
+          <span class="w-1.5 h-1.5 rounded-full" [ngClass]="{
               'bg-amber-500': sessionStatus === 'upcoming',
               'bg-emerald-500 animate-pulse': sessionStatus === 'open',
               'bg-rose-500': sessionStatus === 'expired',
@@ -544,8 +544,7 @@
             <div class="h-px bg-slate-800/60 my-1"></div>
 
             <!-- Admin/Co-Admin: Close Session -->
-            <button *ngIf="canManageRoom && !sessionClosed"
-              (click)="isNavbarMenuOpen = false; openCloseSessionModal()"
+            <button *ngIf="canManageRoom && !sessionClosed" (click)="isNavbarMenuOpen = false; openCloseSessionModal()"
               class="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 rounded-xl transition-all cursor-pointer text-left">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -599,13 +598,15 @@
       class="rounded-2xl border border-slate-700 bg-slate-900 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div class="flex items-center gap-3">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 flex-shrink-0">
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="text-slate-400 flex-shrink-0">
           <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
           <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
         <div>
           <p class="text-sm font-black text-slate-200">Voting is now closed for this session.</p>
-          <p class="text-[11px] text-slate-500 font-semibold">All stories are finalized. You can download the final report below.</p>
+          <p class="text-[11px] text-slate-500 font-semibold">All stories are finalized. You can download the final
+            report below.</p>
         </div>
       </div>
       <button type="button" (click)="handleDownloadSessionReport()"
@@ -624,39 +625,45 @@
     <div *ngIf="sessionExpiredBlocked"
       class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 flex items-center gap-3">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500 flex-shrink-0">
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="text-rose-500 flex-shrink-0">
         <circle cx="12" cy="12" r="10" />
         <path d="m4.9 4.9 14.2 14.2" />
       </svg>
       <div>
         <p class="text-sm font-black text-rose-500">This voting session has expired.</p>
-        <p class="text-[11px] text-rose-400/80 font-semibold">Voting is closed and members can no longer join or cast votes.</p>
+        <p class="text-[11px] text-rose-400/80 font-semibold">Voting is closed and members can no longer join or cast
+          votes.</p>
       </div>
     </div>
 
     <div *ngIf="!sessionExpiredBlocked && sessionStatus === 'upcoming'"
       class="rounded-2xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 flex items-center gap-3">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500 flex-shrink-0">
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="text-amber-500 flex-shrink-0">
         <circle cx="12" cy="12" r="10" />
         <polyline points="12 6 12 12 16 14" />
       </svg>
       <div>
         <p class="text-sm font-black text-amber-500">Voting has not started yet.</p>
-        <p class="text-[11px] text-amber-500/80 font-semibold">{{ sessionScheduleText }}. You can review the backlog while you wait.</p>
+        <p class="text-[11px] text-amber-500/80 font-semibold">{{ sessionScheduleText }}. You can review the backlog
+          while you wait.</p>
       </div>
     </div>
 
     <div *ngIf="!sessionExpiredBlocked && sessionStatus === 'expired'"
       class="rounded-2xl border border-rose-500/30 bg-rose-500/10 px-4 py-3 flex items-center gap-3">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500 flex-shrink-0">
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="text-rose-500 flex-shrink-0">
         <circle cx="12" cy="12" r="10" />
         <path d="m4.9 4.9 14.2 14.2" />
       </svg>
       <div>
         <p class="text-sm font-black text-rose-500">This voting session has expired.</p>
-        <p class="text-[11px] text-rose-400/80 font-semibold">{{ sessionScheduleText }}. Voting is now closed for all members.</p>
+        <p class="text-[11px] text-rose-400/80 font-semibold">{{ sessionScheduleText }}. Voting is now closed for all
+          members.</p>
       </div>
     </div>
 
@@ -1094,8 +1101,7 @@
 
           <!-- Scheduled window / closed session blocks voting -->
           <div *ngIf="taskInfo && userRole === 'Estimator' && !isVotingAllowed"
-            class="border p-6 rounded-xl text-center flex flex-col items-center justify-center gap-1 mt-2"
-            [ngClass]="sessionStatus === 'upcoming'
+            class="border p-6 rounded-xl text-center flex flex-col items-center justify-center gap-1 mt-2" [ngClass]="sessionStatus === 'upcoming'
               ? 'bg-amber-500/5 border-amber-500/25 text-amber-500'
               : (sessionStatus === 'closed'
                 ? 'bg-slate-950 border-slate-800 text-slate-400'
@@ -1120,13 +1126,15 @@
             </svg>
             <span class="text-xs font-black">
               {{ sessionStatus === 'upcoming'
-                ? 'Voting has not started yet.'
-                : (sessionStatus === 'closed'
-                  ? 'Voting is now closed for this session.'
-                  : 'This voting session has expired.') }}
+              ? 'Voting has not started yet.'
+              : (sessionStatus === 'closed'
+              ? 'Voting is now closed for this session.'
+              : 'This voting session has expired.') }}
             </span>
-            <span *ngIf="sessionStatus !== 'closed'" class="text-[10px] font-semibold opacity-80 max-w-sm">{{ sessionScheduleText }}</span>
-            <span *ngIf="sessionStatus === 'closed'" class="text-[10px] font-semibold opacity-80 max-w-sm">The session has ended. Download the final report from the banner above.</span>
+            <span *ngIf="sessionStatus !== 'closed'" class="text-[10px] font-semibold opacity-80 max-w-sm">{{
+              sessionScheduleText }}</span>
+            <span *ngIf="sessionStatus === 'closed'" class="text-[10px] font-semibold opacity-80 max-w-sm">The session
+              has ended. Download the final report from the banner above.</span>
           </div>
 
           <div *ngIf="taskInfo && userRole === 'Estimator' && isVotingAllowed" class="responsive-card-grid">
@@ -1235,9 +1243,8 @@
                     class="text-[9px] font-bold font-mono text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded">
                     {{ticket.id}}
                   </span>
-                  <span *ngIf="ticket.id !== 'INFO'"
-                    class="text-[9px] font-black px-1.5 py-0.5 rounded border" [ngClass]="getPriorityMeta(ticket.priority).cls"
-                    title="Story priority (5 = highest, 1 = lowest)">
+                  <span *ngIf="ticket.id !== 'INFO'" class="text-[9px] font-black px-1.5 py-0.5 rounded border"
+                    [ngClass]="getPriorityMeta(ticket.priority).cls" title="Story priority (5 = highest, 1 = lowest)">
                     {{ getPriorityMeta(ticket.priority).label }}
                   </span>
                   <span *ngIf="canManageRoom && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
@@ -1430,9 +1437,10 @@
                   </button>
                 </div>
 
-                <div class="flex items-center gap-2 select-none p-1.5 bg-slate-950/40 rounded-lg border border-slate-900">
-                  <input type="checkbox" id="csv-select-all"
-                    [checked]="selectedCsvIds.length === csvStories.length" (change)="handleCsvToggleSelectAll()"
+                <div
+                  class="flex items-center gap-2 select-none p-1.5 bg-slate-950/40 rounded-lg border border-slate-900">
+                  <input type="checkbox" id="csv-select-all" [checked]="selectedCsvIds.length === csvStories.length"
+                    (change)="handleCsvToggleSelectAll()"
                     class="w-3.5 h-3.5 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
                   <label for="csv-select-all"
                     class="text-[10px] text-slate-300 font-bold cursor-pointer flex-1 text-left">
@@ -1442,22 +1450,23 @@
 
                 <div class="max-h-48 overflow-y-auto space-y-1.5 pr-1 custom-scrollbar">
                   <div *ngFor="let story of csvStories"
-                    class="flex items-start gap-2.5 p-2 rounded-xl border transition-all cursor-pointer"
-                    [ngClass]="selectedCsvIds.includes(story.id)
+                    class="flex items-start gap-2.5 p-2 rounded-xl border transition-all cursor-pointer" [ngClass]="selectedCsvIds.includes(story.id)
                       ? 'bg-indigo-500/10 border-indigo-500/35 shadow-sm shadow-indigo-500/5'
                       : 'bg-slate-955/60 border-slate-850 hover:bg-slate-950'">
-                    <input type="checkbox" [id]="'csv-story-' + story.id"
-                      [checked]="selectedCsvIds.includes(story.id)" (change)="handleCsvToggleSelect(story.id)"
+                    <input type="checkbox" [id]="'csv-story-' + story.id" [checked]="selectedCsvIds.includes(story.id)"
+                      (change)="handleCsvToggleSelect(story.id)"
                       class="w-3.5 h-3.5 mt-0.5 rounded border-slate-800 text-indigo-500 focus:ring-indigo-500/30 cursor-pointer" />
                     <label [for]="'csv-story-' + story.id" class="text-[10px] text-left cursor-pointer flex-1 min-w-0">
                       <div class="flex items-center gap-1.5 flex-wrap">
                         <span class="font-black text-indigo-400 font-mono">{{ story.id }}</span>
-                        <span class="font-black px-1.5 py-0.5 rounded border" [ngClass]="getPriorityMeta(story.priority).cls">
+                        <span class="font-black px-1.5 py-0.5 rounded border"
+                          [ngClass]="getPriorityMeta(story.priority).cls">
                           {{ getPriorityMeta(story.priority).label }}
                         </span>
                       </div>
                       <div class="font-bold text-slate-200 truncate mt-0.5">{{ story.title }}</div>
-                      <div class="text-[9px] text-slate-500 truncate font-semibold mt-0.5" *ngIf="story.desc">{{ story.desc }}</div>
+                      <div class="text-[9px] text-slate-500 truncate font-semibold mt-0.5" *ngIf="story.desc">{{
+                        story.desc }}</div>
                     </label>
                   </div>
                 </div>
@@ -1465,7 +1474,8 @@
                 <button type="button" [disabled]="selectedCsvIds.length === 0" (click)="handleImportCsvStories()"
                   class="w-full bg-emerald-600 hover:bg-emerald-550 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-bold py-2 px-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="text-white">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" x2="12" y1="15" y2="3" />
@@ -1955,7 +1965,8 @@
               class="w-full text-left p-4 rounded-2xl border border-rose-500/30 bg-rose-500/5 hover:bg-rose-500/10 transition-all cursor-pointer">
               <div class="flex items-center gap-2 mb-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500">
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-rose-500">
                   <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
@@ -1970,7 +1981,8 @@
               class="w-full text-left p-4 rounded-2xl border border-indigo-500/30 bg-indigo-500/5 hover:bg-indigo-500/10 transition-all cursor-pointer">
               <div class="flex items-center gap-2 mb-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400">
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="text-indigo-400">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
                   <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
@@ -2004,9 +2016,8 @@
             <div *ngIf="participants.length <= 1" class="text-xs text-slate-500 py-6 text-center font-medium">
               No other participants available to promote.
             </div>
-            <button *ngFor="let member of participants"
-              [hidden]="member.id === userContext.id"
-              type="button" (click)="assignCohostAndLeave(member)"
+            <button *ngFor="let member of participants" [hidden]="member.id === userContext.id" type="button"
+              (click)="assignCohostAndLeave(member)"
               class="w-full flex items-center gap-3 p-3 rounded-2xl border border-slate-800 bg-slate-925 hover:border-indigo-500/40 hover:bg-indigo-500/5 transition-all cursor-pointer text-left">
               <div
                 class="w-10 h-10 rounded-full flex items-center justify-center text-base font-black border-2 bg-slate-955 flex-shrink-0"
@@ -2020,7 +2031,8 @@
                 <p class="text-[11px] text-slate-500 font-semibold">{{member.role}}</p>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400 flex-shrink-0">
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="text-indigo-400 flex-shrink-0">
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -2043,7 +2055,8 @@
         class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative text-left animate-toast-slide-in">
         <h3 class="text-lg font-black text-slate-100 mb-1 flex items-center gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-500">
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="text-amber-500">
             <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
