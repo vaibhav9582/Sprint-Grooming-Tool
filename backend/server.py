@@ -628,8 +628,8 @@ async def join_room(sid, data):
 
         # Send scheduling confirmation and set up reminder
         if voting_start_at and admin_email:
-            asyncio.create_task(
-                send_scheduling_confirmation(
+            try:
+                await send_scheduling_confirmation(
                     room_id=room_id,
                     admin_email=admin_email,
                     session_name=session_name or "Sprint Session",
@@ -641,7 +641,8 @@ async def join_room(sid, data):
                     voting_start_display=voting_start_display,
                     voting_end_display=voting_end_display
                 )
-            )
+            except Exception as e:
+                print(f"Error sending scheduling confirmation: {e}")
             room_timeouts[room_id]['votingReminderTimeout'] = asyncio.create_task(
                 send_voting_reminder_delayed(
                     room_id=room_id,
