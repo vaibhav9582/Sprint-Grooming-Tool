@@ -31,12 +31,18 @@ export class App implements OnInit, OnDestroy {
     sessionPriority: 2,
     deckType: 'Fibonacci',
     votingStartAt: '',
-    votingEndAt: ''
+    votingEndAt: '',
+    votingStartDisplay: '',
+    votingEndDisplay: '',
+    adminEmail: '',
+    adminToken: ''
   };
 
   // Scheduled session window (Create Session form inputs, datetime-local strings)
   votingStartInput = '';
   votingEndInput = '';
+  adminEmail = '';
+  adminToken = '';
   showScheduleForm = false;
 
   // Scheduled session window (synced from server, absolute UTC ISO strings)
@@ -269,6 +275,10 @@ export class App implements OnInit, OnDestroy {
     // Check URL parameters for invites
     const params = new URLSearchParams(window.location.search);
     const roomParam = params.get('room');
+    const adminTokenParam = params.get('adminToken');
+    if (adminTokenParam) {
+      this.adminToken = adminTokenParam;
+    }
     const pathParts = window.location.pathname.split('/');
     const joinIdx = pathParts.indexOf('join');
     const hasJoinParam = (joinIdx !== -1 && pathParts[joinIdx + 1]) || roomParam;
@@ -283,6 +293,9 @@ export class App implements OnInit, OnDestroy {
         // If there is no specific target room in the URL, or if it matches our active session room, restore session
         if (!targetRoom || targetRoom === parsedContext.roomId) {
           this.userContext = parsedContext;
+          if (this.adminToken) {
+            this.userContext.adminToken = this.adminToken;
+          }
           this.name = this.userContext.name || '';
           this.roomIdInput = this.userContext.roomId || '';
           this.deckType = this.userContext.deckType || 'Fibonacci';
@@ -434,8 +447,27 @@ export class App implements OnInit, OnDestroy {
             sessionPriority: this.userContext.sessionPriority || 3,
             deckType: this.userContext.deckType,
             votingStartAt: this.userContext.votingStartAt || null,
-            votingEndAt: this.userContext.votingEndAt || null
+            votingEndAt: this.userContext.votingEndAt || null,
+            votingStartDisplay: this.userContext.votingStartDisplay || null,
+            votingEndDisplay: this.userContext.votingEndDisplay || null,
+            adminEmail: this.userContext.adminEmail || null,
+            frontendUrl: window.location.origin,
+            adminToken: this.userContext.adminToken || null
           });
+        });
+      });
+
+      this.socket.on('email-sent', (data: any) => {
+        this.ngZone.run(() => {
+          if (data.success) {
+            let emailType = "Session notification";
+            if (data.type === 'confirmation') emailType = "Scheduling confirmation";
+            else if (data.type === 'pre-reminder') emailType = "15-minute warning";
+            else if (data.type === 'reminder') emailType = "Voting reminder";
+            this.addToast(`${emailType} email successfully sent to ${data.email}!`, 'success');
+          } else {
+            this.addToast(`Failed to send ${data.type} email to ${data.email}.`, 'error');
+          }
         });
       });
 
@@ -652,7 +684,13 @@ export class App implements OnInit, OnDestroy {
     // Scheduled voting window (only applies when the host sets a start time)
     let votingStartIso = '';
     let votingEndIso = '';
-    if (isHost && this.showScheduleForm && this.votingStartInput) {
+    let votingStartDisplay = '';
+    let votingEndDisplay = '';
+    if (isHost && this.votingStartInput) {
+      if (!this.adminEmail.trim()) {
+        this.addToast('Please enter an Admin Email Address to schedule the session.', 'error');
+        return;
+      }
       const start = new Date(this.votingStartInput);
       if (isNaN(start.getTime())) {
         this.addToast('Please enter a valid voting start date & time.', 'error');
@@ -663,6 +701,16 @@ export class App implements OnInit, OnDestroy {
         return;
       }
       votingStartIso = start.toISOString();
+      
+      const pad = (n: number) => n < 10 ? '0' + n : n;
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local Time';
+      
+      let startHours = start.getHours();
+      const ampm = startHours >= 12 ? 'PM' : 'AM';
+      startHours = startHours % 12;
+      startHours = startHours ? startHours : 12;
+      const startHoursStr = pad(startHours);
+      votingStartDisplay = `${start.getFullYear()}-${pad(start.getMonth() + 1)}-${pad(start.getDate())} ${startHoursStr}:${pad(start.getMinutes())} ${ampm} (${tz})`;
 
       if (this.votingEndInput) {
         const end = new Date(this.votingEndInput);
@@ -675,6 +723,13 @@ export class App implements OnInit, OnDestroy {
           return;
         }
         votingEndIso = end.toISOString();
+        
+        let endHours = end.getHours();
+        const endAmpm = endHours >= 12 ? 'PM' : 'AM';
+        endHours = endHours % 12;
+        endHours = endHours ? endHours : 12;
+        const endHoursStr = pad(endHours);
+        votingEndDisplay = `${end.getFullYear()}-${pad(end.getMonth() + 1)}-${pad(end.getDate())} ${endHoursStr}:${pad(end.getMinutes())} ${endAmpm} (${tz})`;
       }
     }
 
@@ -691,7 +746,11 @@ export class App implements OnInit, OnDestroy {
       sessionPriority: isHost ? this.sessionPriority : 3,
       deckType: this.deckType,
       votingStartAt: votingStartIso,
-      votingEndAt: votingEndIso
+      votingEndAt: votingEndIso,
+      votingStartDisplay,
+      votingEndDisplay,
+      adminEmail: isHost ? this.adminEmail.trim() : '',
+      adminToken: this.adminToken || ''
     };
 
     sessionStorage.setItem('sprint_grooming_user_context', JSON.stringify(this.userContext));
@@ -1113,7 +1172,7 @@ export class App implements OnInit, OnDestroy {
     this.inviteRoomFound = false;
     this.lobbyTab = 'create';
     this.currentScreen = 'home';
-    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, isCoHost: false, sessionName: '', sessionPriority: 2, deckType: 'Fibonacci', votingStartAt: '', votingEndAt: '' };    this.participants = [];
+    this.userContext = { id: '', name: '', avatar: '', color: '', role: '', roomId: '', isHost: false, isCoHost: false, sessionName: '', sessionPriority: 2, deckType: 'Fibonacci', votingStartAt: '', votingEndAt: '', votingStartDisplay: '', votingEndDisplay: '', adminEmail: '', adminToken: '' };    this.participants = [];
     this.backlog = [];
     this.taskInfo = null;
     this.selectedCard = null;
@@ -1123,6 +1182,8 @@ export class App implements OnInit, OnDestroy {
     // Reset scheduled-session + CSV state
     this.votingStartInput = '';
     this.votingEndInput = '';
+    this.adminEmail = '';
+    this.adminToken = '';
     this.syncedVotingStartAt = null;
     this.syncedVotingEndAt = null;
     this.syncedExpiresAt = null;
