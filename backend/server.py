@@ -269,7 +269,7 @@ def format_to_12hr(display_str):
         pass
     return display_str
 
-async def send_scheduling_confirmation(room_id, admin_email, session_name, voting_start_at, voting_end_at, expires_at, frontend_url, admin_token, voting_start_display=None, voting_end_display=None):
+async def send_scheduling_confirmation(room_id, admin_email, session_name, voting_start_at, voting_end_at, expires_at, frontend_url, admin_token, voting_start_display=None, voting_end_display=None, sid=None):
     subject = f"🗳️ Voting Session Scheduled: {session_name}"
     join_link = f"{frontend_url}/join/{room_id}?adminToken={admin_token}"
     
@@ -324,7 +324,10 @@ async def send_scheduling_confirmation(room_id, admin_email, session_name, votin
     </html>
     """
     success = await send_email(admin_email, subject, html_content)
-    await sio.emit('email-sent', {'type': 'confirmation', 'email': admin_email, 'success': success}, room=room_id)
+    if sid:
+        await sio.emit('email-sent', {'type': 'confirmation', 'email': admin_email, 'success': success}, to=sid)
+    else:
+        await sio.emit('email-sent', {'type': 'confirmation', 'email': admin_email, 'success': success}, room=room_id)
 
 async def send_voting_reminder(room_id, admin_email, session_name, voting_start_at, frontend_url, admin_token, voting_start_display=None):
     subject = f"🔔 Voting has Started: {session_name}"
@@ -391,72 +394,6 @@ async def send_voting_reminder_delayed(room_id, admin_email, session_name, votin
         print(f"Scheduled voting reminder for room {room_id} was cancelled.")
         pass
 
-async def send_voting_pre_reminder(room_id, admin_email, session_name, voting_start_at, frontend_url, admin_token, voting_start_display=None):
-    subject = f"⏳ Voting Starts in 15 Minutes: {session_name}"
-    join_link = f"{frontend_url}/join/{room_id}?adminToken={admin_token}"
-    
-    start_dt = parse_iso(voting_start_at)
-    start_str = format_to_12hr(voting_start_display) or (start_dt.strftime('%Y-%m-%d %H:%M UTC') if start_dt else "now")
-    
-    html_content = f"""
-    <html>
-    <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; color: #1e293b; padding: 24px; margin: 0;">
-        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 32px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);">
-            <div style="text-align: center; margin-bottom: 24px;">
-                <span style="font-size: 24px; font-weight: 800; color: #fb4e0b;">Sprint Grooming Tool</span>
-            </div>
-            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin-bottom: 24px;" />
-            <h2 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 12px;">⏳ Voting Starts in 15 Minutes</h2>
-            <p style="font-size: 14px; color: #475569; line-height: 1.6; margin-bottom: 20px;">
-                This is a quick reminder that your sprint grooming session, <strong>{session_name}</strong>, is scheduled to start voting in 15 minutes. Get ready and join the room!
-            </p>
-            <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 24px 0;">
-                <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #fb4e0b; width: 140px;">Room / Session ID:</td>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 700; color: #0f172a; font-family: monospace;">{room_id}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #fb4e0b;">Session Name:</td>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #334155;">{session_name}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #fb4e0b;">Start Time:</td>
-                        <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #334155;">{start_str}</td>
-                    </tr>
-                </table>
-            </div>
-            <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
-                <a href="{join_link}" style="background-color: #fb4e0b; color: #ffffff; padding: 12px 28px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-block; font-size: 14px; box-shadow: 0 4px 6px -1px rgba(251, 78, 11, 0.2);">Go to Voting Room</a>
-            </div>
-            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 32px; margin-bottom: 0;">
-                This is a scheduled pre-voting reminder from your Sprint Grooming Server.
-            </p>
-        </div>
-    </body>
-    </html>
-    """
-    success = await send_email(admin_email, subject, html_content)
-    await sio.emit('email-sent', {'type': 'pre-reminder', 'email': admin_email, 'success': success}, room=room_id)
-
-async def send_voting_pre_reminder_delayed(room_id, admin_email, session_name, voting_start_at, frontend_url, admin_token, voting_start_display=None):
-    try:
-        start_dt = parse_iso(voting_start_at)
-        if not start_dt:
-            return
-        
-        delay = (start_dt - datetime.now(timezone.utc)).total_seconds()
-        pre_delay = delay - 15 * 60
-        if pre_delay > 0:
-            print(f"Delaying 15-minute pre-voting reminder for room {room_id} by {pre_delay:.1f} seconds...")
-            await asyncio.sleep(pre_delay)
-            
-            if room_id in rooms and not rooms[room_id].get('sessionClosed'):
-                await send_voting_pre_reminder(room_id, admin_email, session_name, voting_start_at, frontend_url, admin_token, voting_start_display)
-    except asyncio.CancelledError:
-        print(f"Scheduled 15-minute pre-voting reminder for room {room_id} was cancelled.")
-        pass
-
 async def cleanup_expired_room_delayed(room_id: str, expires_at_iso: str):
     try:
         expires_dt = parse_iso(expires_at_iso)
@@ -471,7 +408,6 @@ async def cleanup_expired_room_delayed(room_id: str, expires_at_iso: str):
             del rooms[room_id]
             if room_id in room_timeouts:
                 cancel_timeout(room_id, 'votingReminderTimeout')
-                cancel_timeout(room_id, 'votingPreReminderTimeout')
                 cancel_timeout(room_id, 'cleanupTimeout')
                 del room_timeouts[room_id]
     except asyncio.CancelledError:
@@ -526,7 +462,6 @@ async def cleanup_room_delayed(room_id: str):
             del rooms[room_id]
             if room_id in room_timeouts:
                 cancel_timeout(room_id, 'votingReminderTimeout')
-                cancel_timeout(room_id, 'votingPreReminderTimeout')
                 del room_timeouts[room_id]
             print(f"Room {room_id} deleted due to inactivity.")
     except asyncio.CancelledError:
@@ -639,23 +574,13 @@ async def join_room(sid, data):
                     frontend_url=frontend_url,
                     admin_token=room_admin_token,
                     voting_start_display=voting_start_display,
-                    voting_end_display=voting_end_display
+                    voting_end_display=voting_end_display,
+                    sid=sid
                 )
             except Exception as e:
                 print(f"Error sending scheduling confirmation: {e}")
             room_timeouts[room_id]['votingReminderTimeout'] = asyncio.create_task(
                 send_voting_reminder_delayed(
-                    room_id=room_id,
-                    admin_email=admin_email,
-                    session_name=session_name or "Sprint Session",
-                    voting_start_at=voting_start_at,
-                    frontend_url=frontend_url,
-                    admin_token=room_admin_token,
-                    voting_start_display=voting_start_display
-                )
-            )
-            room_timeouts[room_id]['votingPreReminderTimeout'] = asyncio.create_task(
-                send_voting_pre_reminder_delayed(
                     room_id=room_id,
                     admin_email=admin_email,
                     session_name=session_name or "Sprint Session",
@@ -675,7 +600,7 @@ async def join_room(sid, data):
     else:
         # Rejoining active room: cancel cleanup and host transfer tasks
         if room_id not in room_timeouts:
-            room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None, 'votingReminderTimeout': None, 'votingPreReminderTimeout': None}
+            room_timeouts[room_id] = {'cleanupTimeout': None, 'hostTransferTimeout': None, 'votingReminderTimeout': None}
         
         cancel_timeout(room_id, 'cleanupTimeout')
         if rooms[room_id]['hostUserId'] == user_id:
