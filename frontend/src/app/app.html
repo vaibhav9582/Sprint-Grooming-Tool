@@ -231,7 +231,8 @@
               <div class="flex items-center justify-between">
                 <span class="text-[11px] text-slate-300 font-black uppercase tracking-wider flex items-center gap-1.5">
                   <span>Schedule Voting</span>
-                  <span class="text-[9px] text-indigo-450 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">Optional</span>
+                  <span
+                    class="text-[9px] text-indigo-450 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-black uppercase tracking-wider">Optional</span>
                 </span>
                 <span class="text-[9px] text-slate-500 font-semibold">Create 1–2 days ahead</span>
               </div>
@@ -1267,8 +1268,7 @@
                     {{ticket.id}}
                   </span>
                   <span *ngIf="ticket.id !== 'INFO'" class="text-[9px] font-black px-1.5 py-0.5 rounded border"
-                    [ngClass]="getPriorityMeta(ticket.priority).cls"
-                    title="Story priority (5 = highest, 1 = lowest)">
+                    [ngClass]="getPriorityMeta(ticket.priority).cls" title="Story priority (5 = highest, 1 = lowest)">
                     {{ getPriorityMeta(ticket.priority).label }}
                   </span>
                   <span *ngIf="canManageRoom && ticket.estimate === null && (!taskInfo || ticket.id !== taskInfo.id)"
