@@ -197,20 +197,104 @@ if os.path.exists(_env_path):
                 _key, _val = _line.split("=", 1)
                 os.environ[_key.strip()] = _val.strip()
 
-# SMTP Email Settings (Free notifications support)
+# Email Settings (Supports Brevo/Resend HTTP APIs and SMTP fallback)
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "")
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
+
 SMTP_HOST = os.environ.get("SMTP_HOST", "")
 SMTP_PORT = int(os.environ.get("SMTP_PORT", "587"))
 SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 SMTP_FROM = os.environ.get("SMTP_FROM", SMTP_USER)
 
+def send_email_via_brevo(api_key: str, to_email: str, subject: str, html_content: str) -> bool:
+    url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "api-key": api_key,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    }
+    sender_email = SMTP_FROM or "info@sprintgrooming.com"
+    data = {
+        "sender": {"name": "Sprint Grooming Tool", "email": sender_email},
+        "to": [{"email": to_email}],
+        "subject": subject,
+        "htmlContent": html_content
+    }
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(data).encode("utf-8"),
+            headers=headers,
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            resp_body = response.read().decode("utf-8")
+            print(f"Brevo email API response: {response.status} - {resp_body}")
+            return response.status in (200, 201, 202)
+    except Exception as e:
+        print(f"Failed to send email via Brevo: {e}")
+        if hasattr(e, 'read'):
+            try:
+                print(f"Brevo API error details: {e.read().decode('utf-8')}")
+            except Exception:
+                pass
+        return False
+
+def send_email_via_resend(api_key: str, to_email: str, subject: str, html_content: str) -> bool:
+    url = "https://api.resend.com/emails"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+    sender_email = SMTP_FROM or "onboarding@resend.dev"
+    from_header = f"Sprint Grooming Tool <{sender_email}>"
+    data = {
+        "from": from_header,
+        "to": [to_email],
+        "subject": subject,
+        "html": html_content
+    }
+    try:
+        req = urllib.request.Request(
+            url,
+            data=json.dumps(data).encode("utf-8"),
+            headers=headers,
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=10) as response:
+            resp_body = response.read().decode("utf-8")
+            print(f"Resend email API response: {response.status} - {resp_body}")
+            return response.status in (200, 201, 202)
+    except Exception as e:
+        print(f"Failed to send email via Resend: {e}")
+        if hasattr(e, 'read'):
+            try:
+                print(f"Resend API error details: {e.read().decode('utf-8')}")
+            except Exception:
+                pass
+        return False
+
 def send_email_sync(to_email: str, subject: str, html_content: str):
+    # 1. Try Brevo HTTP API first if key is present
+    if BREVO_API_KEY:
+        print(f"Attempting to send email to {to_email} via Brevo HTTP API...")
+        return send_email_via_brevo(BREVO_API_KEY, to_email, subject, html_content)
+        
+    # 2. Try Resend HTTP API second if key is present
+    if RESEND_API_KEY:
+        print(f"Attempting to send email to {to_email} via Resend HTTP API...")
+        return send_email_via_resend(RESEND_API_KEY, to_email, subject, html_content)
+
+    # 3. Fallback to standard SMTP (local development)
     if not SMTP_HOST or not SMTP_USER or not SMTP_PASSWORD:
         print(f"\n[SMTP NOT CONFIGURED - DEMO MODE]")
         print(f"Recipient: {to_email}")
         print(f"Subject: {subject}")
         print(f"HTML Content:\n{html_content}\n")
         return False
+
+    print(f"Attempting to send email to {to_email} via SMTP...")
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
@@ -231,10 +315,10 @@ def send_email_sync(to_email: str, subject: str, html_content: str):
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.sendmail(SMTP_FROM, to_email, msg.as_string())
         server.quit()
-        print(f"Email successfully sent to {to_email}")
+        print(f"Email successfully sent to {to_email} via SMTP")
         return True
     except Exception as e:
-        print(f"Failed to send email to {to_email}: {e}")
+        print(f"Failed to send email via SMTP to {to_email}: {e}")
         return False
 
 async def send_email(to_email: str, subject: str, html_content: str):
