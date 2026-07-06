@@ -204,60 +204,7 @@ SMTP_USER = os.environ.get("SMTP_USER", "")
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "")
 SMTP_FROM = os.environ.get("SMTP_FROM", SMTP_USER)
 
-# Resend API Configuration (Supports bypass of SMTP restrictions on cloud environments)
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
-
-def send_resend_email(to_email: str, subject: str, html_content: str):
-    if not RESEND_API_KEY:
-        return False
-    
-    url = "https://api.resend.com/emails"
-    headers = {
-        "Authorization": f"Bearer {RESEND_API_KEY}",
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    
-    # Use RESEND_FROM if defined, otherwise default to onboarding@resend.dev
-    from_email = os.environ.get("RESEND_FROM", "onboarding@resend.dev")
-    
-    data = {
-        "from": from_email,
-        "to": [to_email],
-        "subject": subject,
-        "html": html_content
-    }
-    
-    try:
-        req = urllib.request.Request(
-            url,
-            data=json.dumps(data).encode("utf-8"),
-            headers=headers,
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=10) as response:
-            status = response.status
-            res_body = response.read().decode("utf-8")
-            print(f"Resend Response status {status}: {res_body}")
-            return status in (200, 201)
-    except Exception as e:
-        err_detail = ""
-        if hasattr(e, "read"):
-            try:
-                err_detail = " - Body: " + e.read().decode("utf-8")
-            except Exception:
-                pass
-        print(f"Failed to send email via Resend API: {e}{err_detail}")
-        return False
-
 def send_email_sync(to_email: str, subject: str, html_content: str):
-    # Try sending via Resend HTTP API first if API key is provided
-    if RESEND_API_KEY:
-        print(f"Attempting to send email via Resend API to {to_email}...")
-        if send_resend_email(to_email, subject, html_content):
-            return True
-        print("Resend delivery failed, falling back to SMTP if configured...")
-
     if not SMTP_HOST or not SMTP_USER or not SMTP_PASSWORD:
         print(f"\n[SMTP NOT CONFIGURED - DEMO MODE]")
         print(f"Recipient: {to_email}")
