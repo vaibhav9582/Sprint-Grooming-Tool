@@ -161,7 +161,7 @@ export class App implements OnInit, OnDestroy {
   // Pre-defined deck mapping helper
   get deckValues(): string[] {
     const DECK_VALUES_MAP = {
-      Fibonacci: ["0.5", "1", "2", "3", "5", "8", "13", "20", "30", "50", "80", "?"],
+      Fibonacci: ["0.5", "1", "2", "3", "5", "8", "13", "21", "34", "55", "89", "?"],
       TShirt: ["XS", "S", "M", "L", "XL", "XXL", "?" ]
     };
     return (DECK_VALUES_MAP as any)[this.deckType] || DECK_VALUES_MAP.Fibonacci;
